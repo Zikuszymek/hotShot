@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">HotShot</string>
+    <string name="pozostalo">zostało</string>
+    <string name="serviceName">HotShotServices</string>
+    <string name="strona_internetowa">STRONA INTERNETOWA</string>
+    <string name="follw">ŚLEDŹ</string>
+    <string name="notify">POWIADOM</string>
+    <string name="title_activity_show_image">ShowImage</string>
+    <string name="refreshing">Odświeżanie</string>
+</resources>
