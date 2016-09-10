@@ -5,6 +5,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.wifi.WifiManager;
 import android.os.PowerManager;
+import android.support.v4.content.WakefulBroadcastReceiver;
+import android.util.Log;
 
 /**
  * Created by Ziku on 2016-08-24.
@@ -24,7 +26,7 @@ public class HotShotAlarmReceiver extends BroadcastReceiver{
 
         if(wifiLock == null){
             WifiManager wifiManager = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
-            wifiLock = wifiManager.createWifiLock(WifiManager.WIFI_MODE_FULL_HIGH_PERF,"LOCK");
+            wifiLock = wifiManager.createWifiLock(WifiManager.WIFI_MODE_FULL_HIGH_PERF,"HOTSHOT");
         }
         wifiLock.acquire();
     }

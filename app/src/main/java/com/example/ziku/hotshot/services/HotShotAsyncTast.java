@@ -12,6 +12,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.wifi.WifiManager;
 import android.os.AsyncTask;
+import android.os.PowerManager;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
 import android.util.Log;
@@ -38,19 +39,29 @@ public class HotShotAsyncTast extends AsyncTask<String,Void,Void>{
     private Context context;
     private ConnectivityManager connectivityManager;
     private Runnable postExecute = null;
+    private boolean imageForced;
+    private PowerManager powerManager;
+    private PowerManager.WakeLock powerWakeLock;
 
-    public HotShotAsyncTast(HotShotsDatabase db , Context context, ConnectivityManager connectivityManager, Runnable postExecute)
+    public HotShotAsyncTast(HotShotsDatabase db , Context context, ConnectivityManager connectivityManager, Runnable postExecute, boolean imageForced)
     {
+
         super();
         this.db = db;
         this.context = context;
         this.connectivityManager = connectivityManager;
         this.postExecute = postExecute;
+        this.imageForced = imageForced;
+//        this.powerManager = (PowerManager)context.getSystemService(Context.POWER_SERVICE);
+//        this.powerWakeLock = powerManager.newWakeLock(PowerManager.FULL_WAKE_LOCK,"HotShotAsyncTask");
+
     }
 
     @Override
     protected Void doInBackground(String... strings) {
-        HotShotAlarmReceiver.wakeUpMothaFucka(context);
+
+//        HotShotAlarmReceiver.wakeUpMothaFucka(context);
+//        powerWakeLock.acquire();
 
         Notification notification;
         Notification notificationToSend = null;
@@ -72,8 +83,7 @@ public class HotShotAsyncTast extends AsyncTask<String,Void,Void>{
             NotificationManager nm = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
             nm.notify(1,notificationToSend);
         }
-        HotShotAlarmReceiver.sleepBitch();
-
+//        HotShotAlarmReceiver.sleepBitch();
         return null;
     }
 
@@ -83,42 +93,64 @@ public class HotShotAsyncTast extends AsyncTask<String,Void,Void>{
         if(postExecute!=null){
             postExecute.run();
         }
+        Log.d("TEST","Post execute Async Task");
     }
 
     private Notification DoUpgradeOfProduct(String webPage)
     {
+
+        NotificationManager nm = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
         Notification notification = null;
         NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
         Log.d("TEST","Processing inside function");
+//        nm.notify(1, CreateNotification("processing","processing", context));
+
         if(networkInfo != null) {
             if(networkInfo.isConnectedOrConnecting()) {
                 Log.d("TEST","Connected or connecting");
+                nm.notify(1, CreateNotification("inside","inside", context));
                 String before = db.GetProductName(webPage);
                 db.UpdateHotShot(webPage);
                 String after = db.GetProductName(webPage);
                 if(!before.equals(after) && !after.equals(WebPageFabric.EMPTY)) {
+                    db.UpdateDateCheckOfHotShot(webPage);
                     Cursor cursor = db.GetImageAndName(webPage);
                     cursor.moveToFirst();
-                    String productName = cursor.getString(cursor.getColumnIndex(HotShotsTable.HotShotsColumn.PRODUCT_NAME));
-                    String imgName = cursor.getString(cursor.getColumnIndex(WebSiteTable.WebSiteColumns.NAME));
-                    String imgUrl = cursor.getString(cursor.getColumnIndex(HotShotsTable.HotShotsColumn.IMG_URL));
-                    DownloadTheIMG(imgName,imgUrl);
-
+                    DownloadImages(cursor);
                     if (postExecute==null) {
+                        String productName = cursor.getString(cursor.getColumnIndex(HotShotsTable.HotShotsColumn.PRODUCT_NAME));
                         notification = CreateNotification(webPage, productName, context);
                     }
+                } else if(imageForced){
+                    Cursor cursor = db.GetImageAndName(webPage);
+                    cursor.moveToFirst();
+                    DownloadImages(cursor);
                 }
+
             }
         }
         return notification;
     }
 
+    public void DownloadImages( Cursor cursor){
+        cursor.moveToFirst();
+        String imgName = cursor.getString(cursor.getColumnIndex(WebSiteTable.WebSiteColumns.NAME));
+        String imgUrl = cursor.getString(cursor.getColumnIndex(HotShotsTable.HotShotsColumn.IMG_URL));
+        DownloadTheIMG(imgName,imgUrl);
+    }
+
     public void DownloadTheIMG(String imgName, String imgUrlString){
         Log.d("TEST","Start downloading image");
+
         try{
             Bitmap bitmap = BitmapFactory.decodeStream((InputStream)new URL(imgUrlString).getContent());
 
+            Log.d("TEST",imgUrlString);
             String fileName = imgName + ".png";
+            File file = context.getFileStreamPath(fileName);
+            if(file.exists()) {
+                file.delete();
+            }
             FileOutputStream fileOutputStream = context.openFileOutput(fileName, Context.MODE_PRIVATE);
             bitmap.compress(Bitmap.CompressFormat.PNG,100,fileOutputStream);
             fileOutputStream.flush();
@@ -126,6 +158,8 @@ public class HotShotAsyncTast extends AsyncTask<String,Void,Void>{
 
         }catch (IOException ex){
             Log.d("ERROR",ex.toString());
+        }catch (NullPointerException ex){
+            Log.d("ERROR", ex.toString());
         }
         Log.d("TEST","Imgage downloaded");
     }
@@ -143,6 +177,7 @@ public class HotShotAsyncTast extends AsyncTask<String,Void,Void>{
         notificationBuilder.setContentTitle("HotShot");
         notificationBuilder.setContentText(webPage + " oferuje nową gorącą okazję: " + product);
         notificationBuilder.setContentIntent(pendingIntent);
+        notificationBuilder.setAutoCancel(true);
 
         Notification notification = notificationBuilder.build();
         long[] steps = {0, 300, 250, 200, 100, 150};

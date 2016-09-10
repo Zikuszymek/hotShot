@@ -47,6 +47,8 @@ public class MainActivity extends FragmentActivity {
     private ViewPager viewPager;
     private boolean hotShotRefreshSeted;
 
+    public static boolean APP_IS_RUNNING = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -130,7 +132,7 @@ public class MainActivity extends FragmentActivity {
                         refreshButton.setImageResource(R.drawable.refresh);
                         refreshButton.clearAnimation();
                     }
-                });
+                }, true);
                 asyncRefresh.execute(WebPageFabric.KOMPUTRONIK,WebPageFabric.X_KOM,
                         WebPageFabric.MORELE,WebPageFabric.PROLINE,WebPageFabric.SATYSFAKCJA);
             }
@@ -145,33 +147,39 @@ public class MainActivity extends FragmentActivity {
            }
         });
 
-        SetServiceAlarmManager();
     }
 
     @Override
     protected void onStart() {
         super.onStart();
-//        SetServiceAlarmManager();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-//        swipeViewAdapter.SetHotShotRefreshOnClick();
-//        SetServiceAlarmManager();
-//        settingCursor = database.GetAllSettings();
-//        settingsAdapter = new SettingsAdapter(this,settingCursor,0);
-//        listView.setAdapter(settingsAdapter);
+        Log.d("TEST","onResume");
+        if(APP_IS_RUNNING)
+            SetHotShotsListView();
+        SetServiceAlarmManager();
     }
 
     @Override
     protected void onPause() {
         super.onPause();
+        this.APP_IS_RUNNING = true;
     }
 
     @Override
     protected void onStop() {
         super.onStop();
+    }
+
+    private void SetHotShotsListView() {
+        ListView hotShotListView = (ListView) this.findViewById(R.id.hot_shot_swipe_list);
+        HotShotsDatabase database = HotShotsDatabase.ReturnSingleInstance(this);
+        Cursor thisCursor = database.GetAllActiveHotShots();
+        HotShotsAdapter hotShotsAdapter = new HotShotsAdapter(this, thisCursor, 0);
+        hotShotListView.setAdapter(hotShotsAdapter);
     }
 
 

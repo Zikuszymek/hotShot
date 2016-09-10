@@ -34,7 +34,7 @@ public class HotShotsTable {
         sb.append(HotShotsColumn.NEW_PRICE + " TEXT NOT NULL, ");
         sb.append(HotShotsColumn.ITEMS_LEFT + " TEXT NOT NULL,");
         sb.append(HotShotsColumn.TIME_PERIOD + " TEXT NOT NULL, ");
-        sb.append(HotShotsColumn.LAST_CHECK + " TEXT NOT NULL, ");
+        sb.append(HotShotsColumn.LAST_CHECK + " INTEGER NOT NULL, ");
         sb.append(HotShotsColumn.PRODUCT_URL + " TEXT NOT NULL, ");
         sb.append(HotShotsColumn.IMG_URL + " TEXT NOT NULL, ");
 

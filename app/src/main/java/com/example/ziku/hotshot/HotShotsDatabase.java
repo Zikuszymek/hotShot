@@ -12,6 +12,10 @@ import android.widget.CursorAdapter;
 import com.example.ziku.hotshot.tables.HotShotsTable;
 import com.example.ziku.hotshot.tables.WebSiteTable;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 /**
  * Created by Ziku on 2016-07-26.
  */
@@ -130,11 +134,22 @@ public class HotShotsDatabase extends SQLiteOpenHelper {
                 HotShotsTable.HotShotsColumn.ITEMS_LEFT + " , " + HotShotsTable.HotShotsColumn.PRODUCT_URL + " , " +
                 WebSiteTable.WebSiteColumns.NAME + " ," + WebSiteTable.WebSiteColumns.ACTIVE + " FROM " + HotShotsTable.TABLE_NAME + " INNER JOIN " + WebSiteTable.TABLE_NAME +
                 " ON " + HotShotsTable.TABLE_NAME + "." + HotShotsTable.HotShotsColumn.WEB_SITE_ID +
-                " = " + WebSiteTable.TABLE_NAME + "." + WebSiteTable.WebSiteColumns._ID + " WHERE " +  WebSiteTable.WebSiteColumns.ACTIVE + " != 0 AND " +  HotShotsTable.HotShotsColumn.PRODUCT_NAME + " !=\"-\"";
+                " = " + WebSiteTable.TABLE_NAME + "." + WebSiteTable.WebSiteColumns._ID + " WHERE " +  WebSiteTable.WebSiteColumns.ACTIVE + " != 0 AND " +  HotShotsTable.HotShotsColumn.PRODUCT_NAME +
+                " !=\"-\" ORDER BY " + HotShotsTable.HotShotsColumn.LAST_CHECK + " DESC";
 //                WebSiteTable.WebSiteColumns.ACTIVE + " >0";
 //        Log.d("DB-TEST",query);
         SQLiteDatabase db = getReadableDatabase();
         Cursor cursor = db.rawQuery(query,null);
         return cursor;
+    }
+
+    public void UpdateDateCheckOfHotShot(String webPageName){
+        Date now = new Date();
+        Long time = now.getTime();
+        ContentValues cv = new ContentValues();
+        cv.put(HotShotsTable.HotShotsColumn.LAST_CHECK,time);
+        int id = GetIDProvidedWebPage(webPageName);
+        SQLiteDatabase db = getReadableDatabase();
+        db.update(HotShotsTable.TABLE_NAME,cv,"_id="+id,null);
     }
 }

@@ -43,19 +43,6 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:layout_weight="1">
-            <TextView
-                android:id="@+id/product_name"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingBottom="5sp"
-                android:paddingTop="5sp"
-                android:paddingLeft="10sp"
-                android:paddingRight="10sp"
-                android:text="X-Kom X-KomX-KomX-KomX-KomX-KomX-KomX-KomX-KomX-KomX-KomX-Kom" />
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="2dp"
-                android:background="#4F60"/>
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -105,6 +92,20 @@
                         android:text="10"/>
                 </LinearLayout>
             </LinearLayout>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:background="#4F60"/>
+            <TextView
+                android:id="@+id/product_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingBottom="5sp"
+                android:paddingTop="5sp"
+                android:paddingLeft="10sp"
+                android:paddingRight="10sp"
+                android:text="X-Kom X-KomX-KomX-KomX-KomX-KomX-KomX-KomX-KomX-KomX-KomX-Kom" />
+
         </LinearLayout>
     </LinearLayout>
     <View

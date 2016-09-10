@@ -13,7 +13,8 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity">
+
+        <activity android:name=".MainActivity" android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -21,7 +22,7 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".management.ShowImageActivity" android:theme="@style/PopupActivity"></activity>
+        <activity android:name=".management.ShowImageActivity" android:theme="@style/PopupActivity"/>
 
         <service
             android:name=".services.HotShotService"
@@ -29,31 +30,9 @@
             android:exported="false"
             android:label="@string/serviceName"
             android:process=":HotShotService" />
-        <!-- <service android:name=".services.HotShotIntentService" android:label="@string/serviceName"/> -->
-        <receiver
-            android:name=".services.HotShotAlarmReceiver"
-            android:process=":HotShotService">
 
-            <!-- android:exported="true"> -->
-            <intent-filter>
-
-                <!-- <action android:name="android.intent.action.SCREEN_OFF"/> -->
-                <!-- <action android:name="android.intent.action.SCREEN_ON"/> -->
-                <!-- <action android:name="android.intent.action.USER_PRESENT"/> -->
-                <action android:name="android.intent.action.BOOT_COMPLETED" />
-            </intent-filter>
-        </receiver>
-
-        <service android:name=".services.BackgroundService" android:process=":HotShotService"/>
-
-        <receiver android:name=".services.OnBootRecive"
-            android:enabled="true"
-            android:exported="false">
-            <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED"/>
-            </intent-filter>
-        </receiver>
-
+        <receiver android:name=".services.HotShotAlarmReceiver"
+            android:process=":HotShotService"/>
     </application>
 
 </manifest>

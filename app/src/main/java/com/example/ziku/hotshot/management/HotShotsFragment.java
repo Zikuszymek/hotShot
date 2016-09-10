@@ -14,6 +14,7 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.example.ziku.hotshot.HotShotsDatabase;
+import com.example.ziku.hotshot.MainActivity;
 import com.example.ziku.hotshot.R;
 
 /**
@@ -34,25 +35,25 @@ public class HotShotsFragment extends Fragment{
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-//        Log.d("SWIPE","Fragment HotShot Created");
+        Log.d("SWIPE","Fragment HotShot Created");
         super.onActivityCreated(savedInstanceState);
-        listView = (ListView) getActivity().findViewById(R.id.hot_shot_swipe_list);
-        database = HotShotsDatabase.ReturnSingleInstance(getActivity());
-        SetAdapterOnProperList();
+//        if(!MainActivity.APP_IS_RUNNING) {
+            listView = (ListView) getActivity().findViewById(R.id.hot_shot_swipe_list);
+            database = HotShotsDatabase.ReturnSingleInstance(getActivity());
+            cursor = database.GetAllActiveHotShots();
+            hotShotsAdapter = new HotShotsAdapter(getContext(), cursor, 0);
+            listView.setAdapter(null);
+            listView.setAdapter(hotShotsAdapter);
+//
+
+//        }
+//        SetAdapterOnProperList();
     }
 
     public void SetAdapterOnProperList(){
         cursor = database.GetAllActiveHotShots();
         hotShotsAdapter = new HotShotsAdapter(getContext(), cursor, 0);
         listView.setAdapter(hotShotsAdapter);
-
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Log.d("TEST","Clicked");
-
-            }
-        });
     }
 
 

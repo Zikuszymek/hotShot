@@ -56,9 +56,14 @@ public class HotShotsAdapter extends CursorAdapter {
         final String fileName = cursor.getString(cursor.getColumnIndex(WebSiteTable.WebSiteColumns.NAME)) + ".png";
         File file = context.getFileStreamPath(fileName);
         if(file.exists()){
-            Log.d("ERROR","file exists");
-            Uri uri = Uri.fromFile(file);
-            imageView.setImageURI(uri);
+            if(file.length() > 0){
+                Log.d("ERROR","file exists");
+                Uri uri = Uri.fromFile(file);
+                imageView.setImageURI(uri);
+                Log.d("TEST","image size " + file.length());
+            } else {
+                imageView.setImageResource(R.drawable.hot_shot_orange_icon_);
+            }
         }
 
         content.setFocusable(true);

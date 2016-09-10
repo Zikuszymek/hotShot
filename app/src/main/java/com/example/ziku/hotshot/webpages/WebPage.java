@@ -57,7 +57,6 @@ public abstract class WebPage {
         this.cv.put(HotShotsTable.HotShotsColumn.OLD_PRICE,odlPrice);
         this.cv.put(HotShotsTable.HotShotsColumn.NEW_PRICE,newPrice);
         this.cv.put(HotShotsTable.HotShotsColumn.ITEMS_LEFT,itemLeft);
-        this.cv.put(HotShotsTable.HotShotsColumn.LAST_CHECK,date);
         this.cv.put(HotShotsTable.HotShotsColumn.IMG_URL,imgUrl);
         this.cv.put(HotShotsTable.HotShotsColumn.PRODUCT_URL,productUrl);
         Log.d("TIME",date);

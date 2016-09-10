@@ -36,6 +36,7 @@ import java.net.URL;
  */
 public class HotShotService extends Service{
 
+
     private final IBinder binder = new LocalBinder();
     public class LocalBinder extends Binder {
         HotShotService getService(){
@@ -43,12 +44,14 @@ public class HotShotService extends Service{
         }
     }
 
+
     @Nullable
     @Override
     public IBinder onBind(Intent intent) {
         return binder;
     }
 
+    Void cos;
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         ConnectivityManager connectivityManager = (ConnectivityManager)getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -60,19 +63,20 @@ public class HotShotService extends Service{
             HotShotsDatabase db = HotShotsDatabase.ReturnSingleInstance(this);
 
 
-            HotShotAsyncTast asyncRefresh = new HotShotAsyncTast(db, this, connectivityManager, null);
-            asyncRefresh.execute(WebPageFabric.KOMPUTRONIK, WebPageFabric.X_KOM,
-                    WebPageFabric.MORELE, WebPageFabric.PROLINE, WebPageFabric.SATYSFAKCJA);
+            HotShotAsyncTast asyncRefresh = new HotShotAsyncTast(db, this, connectivityManager, null, true);
+            cos = asyncRefresh.execute(WebPageFabric.KOMPUTRONIK, WebPageFabric.X_KOM,
+                    WebPageFabric.MORELE, WebPageFabric.PROLINE, WebPageFabric.SATYSFAKCJA).get();
         }catch (Exception ex){
             Log.d("TEST","DUPA: "+ ex);
         }
+        Log.d("TEST","SERVICE EXIT");
+        HotShotAlarmReceiver.sleepBitch();
         return START_STICKY;
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        Toast.makeText(this,"Service Destroyed",Toast.LENGTH_SHORT).show();
     }
 
     public static void SendNotification(String webPage, String product, Context context){

@@ -5,6 +5,7 @@ import android.app.AlarmManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 
 import com.example.ziku.hotshot.MainActivity;
 
@@ -15,8 +16,10 @@ import com.example.ziku.hotshot.MainActivity;
 public class OnBootRecive extends BroadcastReceiver{
     @Override
     public void onReceive(Context context, Intent intent) {
-        if(intent.getAction().equalsIgnoreCase(Intent.ACTION_BOOT_COMPLETED)){
+        Log.d("TEST","recievied");
+//        if(intent.getAction().equalsIgnoreCase(Intent.ACTION_HEADSET_PLUG)){
             Intent intent1 = new Intent(context, MainActivity.class);
+            intent1.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             context.startActivity(intent1);
 //            Intent intent1 = new Intent(context,BackgroundService.class);
 ////            context.startService(intent1);
@@ -25,6 +28,6 @@ public class OnBootRecive extends BroadcastReceiver{
 //            int interval = 8000;
 //            AlarmManager manager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
 //            manager.setInexactRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), interval,pendingIntent);
-        }
+//        }
     }
 }
