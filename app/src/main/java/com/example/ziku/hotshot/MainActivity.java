@@ -25,6 +25,8 @@ import com.example.ziku.hotshot.management.SettingsAdapter;
 import com.example.ziku.hotshot.management.SwipeViewAdapter;
 import com.example.ziku.hotshot.services.HotShotAsyncTast;
 import com.example.ziku.hotshot.services.HotShotAlarmReceiver;
+import com.example.ziku.hotshot.tables.ActiveORMmanager;
+import com.example.ziku.hotshot.tables.ActiveWebSites;
 
 public class MainActivity extends FragmentActivity {
 
@@ -55,6 +57,8 @@ public class MainActivity extends FragmentActivity {
         setContentView(R.layout.activity_main);
 
         Log.d("TEST","On Create");
+        ActiveORMmanager.AddWebsitesIfNotExists();
+
         database = HotShotsDatabase.ReturnSingleInstance(this);
         refreshButton = (ImageButton) findViewById(R.id.refresh_button);
         settingButton = (ImageButton) findViewById(R.id.settings_button);
@@ -186,7 +190,7 @@ public class MainActivity extends FragmentActivity {
     private void SetServiceAlarmManager() {
         Log.d("TEST", "check if service can be started");
 
-            int TIMER = 60 * 60 * 1000;
+            int TIMER = 5 * 60 * 1000;
             long PERIOD = 1 * 60 * 1000;
 
             AlarmManager manager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);

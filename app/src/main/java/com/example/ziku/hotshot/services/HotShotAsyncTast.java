@@ -35,6 +35,8 @@ import java.net.URL;
  */
 public class HotShotAsyncTast extends AsyncTask<String,Void,Void>{
 
+    private static long MAX_BITMAT_SIZE = 1_000_000;
+
     private HotShotsDatabase db;
     private Context context;
     private ConnectivityManager connectivityManager;
@@ -104,11 +106,11 @@ public class HotShotAsyncTast extends AsyncTask<String,Void,Void>{
         NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
         Log.d("TEST","Processing inside function");
 //        nm.notify(1, CreateNotification("processing","processing", context));
-
+//        nm.notify(1, CreateNotification("inside","inside", context));
         if(networkInfo != null) {
             if(networkInfo.isConnectedOrConnecting()) {
                 Log.d("TEST","Connected or connecting");
-                nm.notify(1, CreateNotification("inside","inside", context));
+//                nm.notify(1, CreateNotification("inside","inside", context));
                 String before = db.GetProductName(webPage);
                 db.UpdateHotShot(webPage);
                 String after = db.GetProductName(webPage);
@@ -127,8 +129,8 @@ public class HotShotAsyncTast extends AsyncTask<String,Void,Void>{
                     DownloadImages(cursor);
                 }
 
-            }
-        }
+            } else {Log.d("TEST","No internet connection");}
+        } else {Log.d("TEST","Network info is null");}
         return notification;
     }
 
@@ -152,7 +154,12 @@ public class HotShotAsyncTast extends AsyncTask<String,Void,Void>{
                 file.delete();
             }
             FileOutputStream fileOutputStream = context.openFileOutput(fileName, Context.MODE_PRIVATE);
-            bitmap.compress(Bitmap.CompressFormat.PNG,100,fileOutputStream);
+                 Log.d("TEST",String.valueOf(bitmap.getByteCount()));
+                 if(bitmap.getByteCount()>(int)MAX_BITMAT_SIZE) {
+                     bitmap = Bitmap.createScaledBitmap(bitmap, (int)(bitmap.getWidth()*0.1),(int)(bitmap.getHeight()*0.1), true);
+                 }
+                   bitmap.compress(Bitmap.CompressFormat.PNG, 100, fileOutputStream);
+//            }
             fileOutputStream.flush();
             fileOutputStream.close();
 

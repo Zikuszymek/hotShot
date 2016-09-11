@@ -12,7 +12,11 @@
         android:icon="@drawable/hot_shot_orange_icon_"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppTheme"
+        android:name="com.activeandroid.app.Application" >
+        <meta-data android:name="AA_DB_NAME" android:value="hot_Shot_active.db" />
+        <meta-data android:name="AA_DB_VERSION" android:value="1" />
+        <meta-data android:name="AA_MODELS" android:value="com.example.ziku.hotshot.tables.ActiveWebSites"/>
 
         <activity android:name=".MainActivity" android:screenOrientation="portrait">
             <intent-filter>

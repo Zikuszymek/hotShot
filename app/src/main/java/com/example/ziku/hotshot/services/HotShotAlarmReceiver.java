@@ -12,6 +12,11 @@ import android.util.Log;
  * Created by Ziku on 2016-08-24.
  */
 public class HotShotAlarmReceiver extends BroadcastReceiver{
+//    @Override
+//    public void onReceive(Context context, Intent intent) {
+//        Intent service = new Intent(context,HotShotService.class);
+//        startWakefulService(context,service);
+//    }
 
     private static PowerManager.WakeLock wakelock = null;
     private static WifiManager.WifiLock wifiLock = null;
@@ -32,10 +37,14 @@ public class HotShotAlarmReceiver extends BroadcastReceiver{
     }
 
     public static synchronized void sleepBitch(){
-        if(wakelock!=null)
+        if(wakelock!=null) {
             wakelock.release();
-        if(wifiLock!=null)
+            wakelock = null;
+        }
+        if(wifiLock!=null) {
             wifiLock.release();
+            wifiLock = null;
+        }
     }
 
     @Override

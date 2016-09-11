@@ -56,12 +56,11 @@ public class HotShotService extends Service{
     public int onStartCommand(Intent intent, int flags, int startId) {
         ConnectivityManager connectivityManager = (ConnectivityManager)getSystemService(Context.CONNECTIVITY_SERVICE);
         HotShotAlarmReceiver.wakeUpMothaFucka(this);
-        SendNotification("cos","cos",this);
+//        SendNotification("cos","cos",this);
 
         Log.d("TEST","service started to run");
         try {
             HotShotsDatabase db = HotShotsDatabase.ReturnSingleInstance(this);
-
 
             HotShotAsyncTast asyncRefresh = new HotShotAsyncTast(db, this, connectivityManager, null, true);
             cos = asyncRefresh.execute(WebPageFabric.KOMPUTRONIK, WebPageFabric.X_KOM,
