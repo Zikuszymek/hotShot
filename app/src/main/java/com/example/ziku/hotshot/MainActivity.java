@@ -4,6 +4,7 @@ import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.graphics.Color;
 import android.net.ConnectivityManager;
@@ -20,20 +21,25 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 
-import com.example.ziku.hotshot.management.HotShotsAdapter;
-import com.example.ziku.hotshot.management.SettingsAdapter;
+import com.example.ziku.hotshot.management.HotShotsActiveAdapter;
+import com.example.ziku.hotshot.management.SettingsActiveAdapter;
 import com.example.ziku.hotshot.management.SwipeViewAdapter;
-import com.example.ziku.hotshot.services.HotShotAsyncTast;
+import com.example.ziku.hotshot.services.ActiveAsyncRefresh;
 import com.example.ziku.hotshot.services.HotShotAlarmReceiver;
+import com.example.ziku.hotshot.tables.ActiveHotShots;
 import com.example.ziku.hotshot.tables.ActiveORMmanager;
-import com.example.ziku.hotshot.tables.ActiveWebSites;
+
+import java.sql.Time;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
 
 public class MainActivity extends FragmentActivity {
 
     private ListView hotShotListView;
-    private HotShotsAdapter hotShotsAdapter;
-    private SettingsAdapter settingsAdapter;
-    private HotShotsDatabase database;
+    private HotShotsActiveAdapter hotShotsAdapter;
+    private SettingsActiveAdapter settingsAdapter;
     private ImageButton refreshButton;
     private ImageButton hotShotButton;
     private ImageButton settingButton;
@@ -48,6 +54,9 @@ public class MainActivity extends FragmentActivity {
     private SwipeViewAdapter swipeViewAdapter;
     private ViewPager viewPager;
     private boolean hotShotRefreshSeted;
+    private SharedPreferences sharedPreferences;
+
+    private static final String DATABASE_WAS_CREATED = "DATABASE_WAS_CREATED";
 
     public static boolean APP_IS_RUNNING = false;
 
@@ -57,9 +66,17 @@ public class MainActivity extends FragmentActivity {
         setContentView(R.layout.activity_main);
 
         Log.d("TEST","On Create");
-        ActiveORMmanager.AddWebsitesIfNotExists();
 
-        database = HotShotsDatabase.ReturnSingleInstance(this);
+        sharedPreferences = getPreferences(Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        if(!sharedPreferences.getBoolean(DATABASE_WAS_CREATED,false)) {
+            Log.d("ACTIVE","Adding elements to database");
+            ActiveORMmanager.AddWebsitesIfNotExists();
+            ActiveORMmanager.AddStaticHotShots();
+            editor.putBoolean(DATABASE_WAS_CREATED,true);
+            editor.commit();
+        }
+
         refreshButton = (ImageButton) findViewById(R.id.refresh_button);
         settingButton = (ImageButton) findViewById(R.id.settings_button);
         hotShotButton = (ImageButton) findViewById(R.id.hot_shots_button);
@@ -69,7 +86,7 @@ public class MainActivity extends FragmentActivity {
         layoutInflater = getLayoutInflater();
         connectivityManager = (ConnectivityManager)getSystemService(Context.CONNECTIVITY_SERVICE);
 
-        swipeViewAdapter = new SwipeViewAdapter(getSupportFragmentManager(),database);
+        swipeViewAdapter = new SwipeViewAdapter(getSupportFragmentManager());
         viewPager = (ViewPager) findViewById(R.id.viewPager);
         viewPager.setAdapter(swipeViewAdapter);
 
@@ -123,13 +140,12 @@ public class MainActivity extends FragmentActivity {
                 refreshButton.startAnimation(AnimationUtils.loadAnimation(context,R.anim.rotate));
                 Toast refreshToast = Toast.makeText(context,R.string.refreshing,Toast.LENGTH_SHORT);
                 refreshToast.show();
-                HotShotAsyncTast asyncRefresh = new HotShotAsyncTast(database, getApplicationContext(), connectivityManager, new Runnable() {
+                ActiveAsyncRefresh activeAsyncRefresh = new ActiveAsyncRefresh( getApplicationContext(), new Runnable() {
                     @Override
                     public void run() {
 
                         ListView listView = (ListView) findViewById(R.id.hot_shot_swipe_list);
-                        Cursor cursor = database.GetAllActiveHotShots();
-                        hotShotsAdapter = new HotShotsAdapter(context, cursor, 0);
+                        hotShotsAdapter = new HotShotsActiveAdapter(context, ActiveHotShots.ReturnAllActiveHotShotsActive());
                         listView.setAdapter(hotShotsAdapter);
                         refreshButton.setClickable(true);
                         refreshButton.setBackgroundColor(orangeColor);
@@ -137,8 +153,9 @@ public class MainActivity extends FragmentActivity {
                         refreshButton.clearAnimation();
                     }
                 }, true);
-                asyncRefresh.execute(WebPageFabric.KOMPUTRONIK,WebPageFabric.X_KOM,
-                        WebPageFabric.MORELE,WebPageFabric.PROLINE,WebPageFabric.SATYSFAKCJA);
+                activeAsyncRefresh.execute(ActiveORMmanager.X_KOM, ActiveORMmanager.KOMPUTRONIK, ActiveORMmanager.SATYSFAKCJA,
+                        ActiveORMmanager.MORELE, ActiveORMmanager.PROLINE, ActiveORMmanager.HELION);
+//                activeAsyncRefresh.execute(ActiveORMmanager.MALL);
             }
         });
 
@@ -179,26 +196,27 @@ public class MainActivity extends FragmentActivity {
     }
 
     private void SetHotShotsListView() {
-        ListView hotShotListView = (ListView) this.findViewById(R.id.hot_shot_swipe_list);
-        HotShotsDatabase database = HotShotsDatabase.ReturnSingleInstance(this);
-        Cursor thisCursor = database.GetAllActiveHotShots();
-        HotShotsAdapter hotShotsAdapter = new HotShotsAdapter(this, thisCursor, 0);
-        hotShotListView.setAdapter(hotShotsAdapter);
+        ListView listView = (ListView) findViewById(R.id.hot_shot_swipe_list);
+        List<ActiveHotShots> activeWebSitesList =  ActiveHotShots.ReturnAllActiveHotShotsActive();
+        HotShotsActiveAdapter hotShotsAdapter = new HotShotsActiveAdapter(this, activeWebSitesList);
+        listView.setAdapter(null);
+        listView.setAdapter(hotShotsAdapter);
     }
 
 
     private void SetServiceAlarmManager() {
         Log.d("TEST", "check if service can be started");
 
-            int TIMER = 5 * 60 * 1000;
-            long PERIOD = 1 * 60 * 1000;
+            long TIMER = 60 * 60 * 1000;
+            long PERIOD = 5 * 60 * 1000;
+            long PROPER_START_TIME = (System.currentTimeMillis()-(Calendar.getInstance().get(Calendar.MINUTE)*60*1000)) + TIMER + PERIOD;
 
             AlarmManager manager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
             Intent serviceIntent = new Intent(getBaseContext(), HotShotAlarmReceiver.class);
-            PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(), 0, serviceIntent, PendingIntent.FLAG_CANCEL_CURRENT);
+            PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(), 0, serviceIntent, 0);
 
-            manager.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + PERIOD, TIMER, pendingIntent);
-            Log.d("TEST", "start service");
+            manager.setRepeating(AlarmManager.RTC_WAKEUP, PROPER_START_TIME, TIMER, pendingIntent);
+            Log.d("TEST", "start service" + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date(PROPER_START_TIME)));
 //        }
     }
 

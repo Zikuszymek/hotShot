@@ -32,9 +32,9 @@ public class WebPageFabric {
     public final static String SATYSFAKCJA_URL = "http://www.satysfakcja.pl/";
     public final static String EMPTY = "-";
 
-    public ContentValues returnNewWebSiteData(String webSite)
+    public ContentValues[] returnNewWebSiteData(String webSite)
     {
-        ContentValues cv;
+        ContentValues[] cv = new ContentValues[1];
         WebPage webPage;
         switch (webSite){
             case WebPageFabric.X_KOM:
@@ -56,7 +56,7 @@ public class WebPageFabric {
                 webPage = new XkomWebPage();
                 break;
         }
-        cv = webPage.GetWebPageData();
+//        cv = webPage.GetWebPageData();
         return cv;
     }
 }

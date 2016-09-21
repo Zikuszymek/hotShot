@@ -3,14 +3,13 @@ package com.example.ziku.hotshot.webpages;
 import android.content.ContentValues;
 import android.util.Log;
 
-import com.example.ziku.hotshot.tables.HotShotsTable;
+import com.example.ziku.hotshot.tables.ActiveHotShots;
+import com.example.ziku.hotshot.tables.ActiveORMmanager;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import java.io.IOException;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.util.ArrayList;
 
 /**
  * Created by Ziku on 2016-07-30.
@@ -19,14 +18,13 @@ public abstract class WebPage {
 
     protected final static String TAG= "WebPageCONNECTION";
     protected Document doc;
-    protected ContentValues cv;
+    protected ArrayList<ContentValues> cv;
 
-    protected String productName = "-";
-    protected String oldPrice = "-";
-    protected String newPrice = "-";
-    protected String itemsLeft = "-";
-    protected String productUrl = "-";
-    protected String imgUrl = "-";
+    protected String productName = ActiveORMmanager.EMPTY;
+    protected int oldPrice = ActiveORMmanager.NULL_PRICE;
+    protected int newPrice = ActiveORMmanager.NULL_PRICE;
+    protected String productUrl = ActiveORMmanager.EMPTY;
+    protected String imgUrl = ActiveORMmanager.EMPTY;
 
     public WebPage() {}
 
@@ -46,27 +44,23 @@ public abstract class WebPage {
     /*
     Method returned ContentValues for provided data downloaded from specified web page
      */
-    public ContentValues ReturnCV(String productName, String odlPrice, String newPrice, String itemLeft, String imgUrl, String productUrl)
+    public ArrayList<ContentValues> ReturnCV(String productName, int odlPrice, int newPrice, String imgUrl, String productUrl)
     {
-        DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
-        Date now = new Date();
-        String date = dateFormat.format(now);
+        cv = new ArrayList<>();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(ActiveHotShots.PRODUCT_NAME,productName);
+        contentValues.put(ActiveHotShots.OLD_PRICE,odlPrice);
+        contentValues.put(ActiveHotShots.NEW_PRICE,newPrice);
+        contentValues.put(ActiveHotShots.IMG_URL,imgUrl);
+        contentValues.put(ActiveHotShots.PRODUCT_URL,productUrl);
 
-        this.cv = new ContentValues();
-        this.cv.put(HotShotsTable.HotShotsColumn.PRODUCT_NAME,productName);
-        this.cv.put(HotShotsTable.HotShotsColumn.OLD_PRICE,odlPrice);
-        this.cv.put(HotShotsTable.HotShotsColumn.NEW_PRICE,newPrice);
-        this.cv.put(HotShotsTable.HotShotsColumn.ITEMS_LEFT,itemLeft);
-        this.cv.put(HotShotsTable.HotShotsColumn.IMG_URL,imgUrl);
-        this.cv.put(HotShotsTable.HotShotsColumn.PRODUCT_URL,productUrl);
-        Log.d("TIME",date);
-
+        cv.add(contentValues);
         return cv;
     }
 
     /*
     Individual method for each class that will download specified data from web page
      */
-    public abstract ContentValues GetWebPageData();
+    public abstract ArrayList<ContentValues> GetWebPageData();
 
 }

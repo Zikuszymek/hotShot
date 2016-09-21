@@ -10,19 +10,15 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.net.wifi.WifiManager;
 import android.os.AsyncTask;
 import android.os.PowerManager;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
 import android.util.Log;
 
-import com.example.ziku.hotshot.HotShotsDatabase;
 import com.example.ziku.hotshot.MainActivity;
 import com.example.ziku.hotshot.R;
 import com.example.ziku.hotshot.WebPageFabric;
-import com.example.ziku.hotshot.tables.HotShotsTable;
-import com.example.ziku.hotshot.tables.WebSiteTable;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -37,7 +33,6 @@ public class HotShotAsyncTast extends AsyncTask<String,Void,Void>{
 
     private static long MAX_BITMAT_SIZE = 1_000_000;
 
-    private HotShotsDatabase db;
     private Context context;
     private ConnectivityManager connectivityManager;
     private Runnable postExecute = null;
@@ -45,11 +40,10 @@ public class HotShotAsyncTast extends AsyncTask<String,Void,Void>{
     private PowerManager powerManager;
     private PowerManager.WakeLock powerWakeLock;
 
-    public HotShotAsyncTast(HotShotsDatabase db , Context context, ConnectivityManager connectivityManager, Runnable postExecute, boolean imageForced)
+    public HotShotAsyncTast(Context context, ConnectivityManager connectivityManager, Runnable postExecute, boolean imageForced)
     {
 
         super();
-        this.db = db;
         this.context = context;
         this.connectivityManager = connectivityManager;
         this.postExecute = postExecute;
@@ -107,38 +101,38 @@ public class HotShotAsyncTast extends AsyncTask<String,Void,Void>{
         Log.d("TEST","Processing inside function");
 //        nm.notify(1, CreateNotification("processing","processing", context));
 //        nm.notify(1, CreateNotification("inside","inside", context));
-        if(networkInfo != null) {
-            if(networkInfo.isConnectedOrConnecting()) {
-                Log.d("TEST","Connected or connecting");
+//        if(networkInfo != null) {
+//            if(networkInfo.isConnectedOrConnecting()) {
+//                Log.d("TEST","Connected or connecting");
 //                nm.notify(1, CreateNotification("inside","inside", context));
-                String before = db.GetProductName(webPage);
-                db.UpdateHotShot(webPage);
-                String after = db.GetProductName(webPage);
-                if(!before.equals(after) && !after.equals(WebPageFabric.EMPTY)) {
-                    db.UpdateDateCheckOfHotShot(webPage);
-                    Cursor cursor = db.GetImageAndName(webPage);
-                    cursor.moveToFirst();
-                    DownloadImages(cursor);
-                    if (postExecute==null) {
-                        String productName = cursor.getString(cursor.getColumnIndex(HotShotsTable.HotShotsColumn.PRODUCT_NAME));
-                        notification = CreateNotification(webPage, productName, context);
-                    }
-                } else if(imageForced){
-                    Cursor cursor = db.GetImageAndName(webPage);
-                    cursor.moveToFirst();
-                    DownloadImages(cursor);
-                }
+//                String before = db.GetProductName(webPage);
+//                db.UpdateHotShot(webPage);
+//                String after = db.GetProductName(webPage);
+//                if(!before.equals(after) && !after.equals(WebPageFabric.EMPTY)) {
+//                    db.UpdateDateCheckOfHotShot(webPage);
+//                    Cursor cursor = db.GetImageAndName(webPage);
+//                    cursor.moveToFirst();
+//                    DownloadImages(cursor);
+//                    if (postExecute==null) {
+//                        String productName = cursor.getString(cursor.getColumnIndex(HotShotsTable.HotShotsColumn.PRODUCT_NAME));
+//                        notification = CreateNotification(webPage, productName, context);
+//                    }/
+//                } else if(imageForced){
+//                    Cursor cursor = db.GetImageAndName(webPage);
+//                    cursor.moveToFirst();
+//                    DownloadImages(cursor);
+//                }
 
-            } else {Log.d("TEST","No internet connection");}
-        } else {Log.d("TEST","Network info is null");}
+//            } else {Log.d("TEST","No internet connection");}
+//        } else {Log.d("TEST","Network info is null");}
         return notification;
     }
 
     public void DownloadImages( Cursor cursor){
         cursor.moveToFirst();
-        String imgName = cursor.getString(cursor.getColumnIndex(WebSiteTable.WebSiteColumns.NAME));
-        String imgUrl = cursor.getString(cursor.getColumnIndex(HotShotsTable.HotShotsColumn.IMG_URL));
-        DownloadTheIMG(imgName,imgUrl);
+//        String imgName = cursor.getString(cursor.getColumnIndex(WebSiteTable.WebSiteColumns.NAME));
+//        String imgUrl = cursor.getString(cursor.getColumnIndex(HotShotsTable.HotShotsColumn.IMG_URL));
+//        DownloadTheIMG(imgName,imgUrl);
     }
 
     public void DownloadTheIMG(String imgName, String imgUrlString){

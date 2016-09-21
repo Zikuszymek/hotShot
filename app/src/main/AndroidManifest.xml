@@ -4,6 +4,7 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE"/>
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
@@ -16,9 +17,10 @@
         android:name="com.activeandroid.app.Application" >
         <meta-data android:name="AA_DB_NAME" android:value="hot_Shot_active.db" />
         <meta-data android:name="AA_DB_VERSION" android:value="1" />
-        <meta-data android:name="AA_MODELS" android:value="com.example.ziku.hotshot.tables.ActiveWebSites"/>
+        <meta-data android:name="AA_MODELS" android:value="com.example.ziku.hotshot.tables.ActiveWebSites, com.example.ziku.hotshot.tables.ActiveHotShots"/>
 
-        <activity android:name=".MainActivity" android:screenOrientation="portrait">
+
+        <activity android:name=".MainActivity" android:launchMode="singleTop">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
