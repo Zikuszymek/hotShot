@@ -7,6 +7,7 @@ import android.app.Service;
 import android.app.TaskStackBuilder;
 import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
 import android.net.wifi.WifiManager;
 import android.os.Binder;
 import android.os.IBinder;
@@ -71,7 +72,8 @@ public class HotShotService extends Service{
 
 //        wakelock.release();
 //        wifiLock.release();
-        HotShotAlarmReceiver.completeWakefulIntent(intent);
+//        HotShotAlarmReceiver.completeWakefulIntent(intent);
+        HotShotAlarmReceiver.sleepBitch();
         return START_NOT_STICKY;
     }
 

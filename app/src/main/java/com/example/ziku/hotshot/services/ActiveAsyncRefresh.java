@@ -15,7 +15,6 @@ import android.util.Log;
 import com.example.ziku.hotshot.MainActivity;
 import com.example.ziku.hotshot.R;
 import com.example.ziku.hotshot.webpages.ActiveWebPageFabric;
-import com.j256.ormlite.stmt.query.Not;
 
 /**
  * Created by Ziku on 2016-09-14.

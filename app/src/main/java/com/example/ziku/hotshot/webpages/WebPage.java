@@ -6,6 +6,7 @@ import android.util.Log;
 import com.example.ziku.hotshot.tables.ActiveHotShots;
 import com.example.ziku.hotshot.tables.ActiveORMmanager;
 
+import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import java.io.IOException;
@@ -63,4 +64,25 @@ public abstract class WebPage {
      */
     public abstract ArrayList<ContentValues> GetWebPageData();
 
+    public static Document GetWebPageAsDesktop(String WEB_PAGE_URL){
+        Document document;
+        try {
+            Connection.Response respone = Jsoup.connect(WEB_PAGE_URL)
+                    .ignoreContentType(true)
+                    .userAgent("Mozilla/5.0 (Android; Tablet; rv:20.0) Gecko/20.0 Firefox/20.0")
+                    .referrer("http://www.google.com").timeout(12000)
+                    .followRedirects(true)
+                    .execute();
+
+            document = respone.parse();
+        }catch (Exception ex){
+            Log.d("ERROR", "Problem occured during connection with komputronik web page");
+            document = null;
+        }
+        return document;
+    }
+
+    public static String GetFullProductPrice(String price){
+        return null;
+    }
 }

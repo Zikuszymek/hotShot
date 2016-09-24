@@ -24,6 +24,7 @@ import android.widget.Toast;
 import com.example.ziku.hotshot.management.HotShotsActiveAdapter;
 import com.example.ziku.hotshot.management.SettingsActiveAdapter;
 import com.example.ziku.hotshot.management.SwipeViewAdapter;
+import com.example.ziku.hotshot.management.TestClass;
 import com.example.ziku.hotshot.services.ActiveAsyncRefresh;
 import com.example.ziku.hotshot.services.HotShotAlarmReceiver;
 import com.example.ziku.hotshot.tables.ActiveHotShots;
@@ -156,6 +157,8 @@ public class MainActivity extends FragmentActivity {
                 activeAsyncRefresh.execute(ActiveORMmanager.X_KOM, ActiveORMmanager.KOMPUTRONIK, ActiveORMmanager.SATYSFAKCJA,
                         ActiveORMmanager.MORELE, ActiveORMmanager.PROLINE, ActiveORMmanager.HELION);
 //                activeAsyncRefresh.execute(ActiveORMmanager.MALL);
+//                TestClass testClass = new TestClass();
+//                testClass.execute();
             }
         });
 
@@ -179,9 +182,8 @@ public class MainActivity extends FragmentActivity {
     protected void onResume() {
         super.onResume();
         Log.d("TEST","onResume");
-        if(APP_IS_RUNNING)
-            SetHotShotsListView();
         SetServiceAlarmManager();
+        SetHotShotsListView();
     }
 
     @Override
@@ -197,26 +199,32 @@ public class MainActivity extends FragmentActivity {
 
     private void SetHotShotsListView() {
         ListView listView = (ListView) findViewById(R.id.hot_shot_swipe_list);
-        List<ActiveHotShots> activeWebSitesList =  ActiveHotShots.ReturnAllActiveHotShotsActive();
-        HotShotsActiveAdapter hotShotsAdapter = new HotShotsActiveAdapter(this, activeWebSitesList);
-        listView.setAdapter(null);
-        listView.setAdapter(hotShotsAdapter);
+        if (listView != null) {
+            List<ActiveHotShots> activeWebSitesList = ActiveHotShots.ReturnAllActiveHotShotsActive();
+            HotShotsActiveAdapter hotShotsAdapter = new HotShotsActiveAdapter(this, activeWebSitesList);
+            listView.setAdapter(null);
+            listView.setAdapter(hotShotsAdapter);
+        }
     }
 
 
     private void SetServiceAlarmManager() {
         Log.d("TEST", "check if service can be started");
 
-            long TIMER = 60 * 60 * 1000;
-            long PERIOD = 5 * 60 * 1000;
-            long PROPER_START_TIME = (System.currentTimeMillis()-(Calendar.getInstance().get(Calendar.MINUTE)*60*1000)) + TIMER + PERIOD;
+            long TIMER = 5 * 60 * 1000;
+            long PERIOD = 2 * 60 * 1000;
+            long PROPER_START_TIME = System.currentTimeMillis() + PERIOD;
+//            long PROPER_START_TIME = (System.currentTimeMillis()-(Calendar.getInstance().get(Calendar.MINUTE)*60*1000)) + (PERIOD) + TIMER;
 
             AlarmManager manager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
             Intent serviceIntent = new Intent(getBaseContext(), HotShotAlarmReceiver.class);
-            PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(), 0, serviceIntent, 0);
+            PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(), 0, serviceIntent, PendingIntent.FLAG_CANCEL_CURRENT);
 
             manager.setRepeating(AlarmManager.RTC_WAKEUP, PROPER_START_TIME, TIMER, pendingIntent);
             Log.d("TEST", "start service" + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date(PROPER_START_TIME)));
+//            Log.d("TEST",String.valueOf(PROPER_START_TIME));
+//            Log.d("TEST",String.valueOf(PROPER_START_TIME2));
+
 //        }
     }
 

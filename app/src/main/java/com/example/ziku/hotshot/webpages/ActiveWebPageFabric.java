@@ -138,6 +138,9 @@ public class ActiveWebPageFabric {
             case ActiveORMmanager.HELION:
                 webPage = new HelionWebPage();
                 break;
+            case ActiveORMmanager.MALL:
+                webPage = new MallWebPage();
+                break;
             default:
                 webPage = new XkomWebPage();
                 break;
