@@ -9,6 +9,7 @@ import android.database.Cursor;
 import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
@@ -209,22 +210,23 @@ public class MainActivity extends FragmentActivity {
 
 
     private void SetServiceAlarmManager() {
-        Log.d("TEST", "check if service can be started");
+        HotShotAlarmReceiver alarmReceiver = new HotShotAlarmReceiver();
+        alarmReceiver.SetAlarmManager(this);
+//        Log.d("TEST", "check if service can be started");
 
-            long TIMER = 5 * 60 * 1000;
-            long PERIOD = 2 * 60 * 1000;
-            long PROPER_START_TIME = System.currentTimeMillis() + PERIOD;
+//            long TIMER = 60 * 60 * 1000L;
+//            long PERIOD = 2 * 60 * 1000L;
+//            long PROPER_START_TIME = SystemClock.elapsedRealtime() + PERIOD;
 //            long PROPER_START_TIME = (System.currentTimeMillis()-(Calendar.getInstance().get(Calendar.MINUTE)*60*1000)) + (PERIOD) + TIMER;
 
-            AlarmManager manager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-            Intent serviceIntent = new Intent(getBaseContext(), HotShotAlarmReceiver.class);
-            PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(), 0, serviceIntent, PendingIntent.FLAG_CANCEL_CURRENT);
 
-            manager.setRepeating(AlarmManager.RTC_WAKEUP, PROPER_START_TIME, TIMER, pendingIntent);
-            Log.d("TEST", "start service" + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date(PROPER_START_TIME)));
-//            Log.d("TEST",String.valueOf(PROPER_START_TIME));
-//            Log.d("TEST",String.valueOf(PROPER_START_TIME2));
-
+//            AlarmManager manager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+//            Intent serviceIntent = new Intent(MainActivity.this, HotShotAlarmReceiver.class);
+//            PendingIntent pendingIntent = PendingIntent.getBroadcast(MainActivity.this, 1113, serviceIntent, PendingIntent.FLAG_CANCEL_CURRENT);
+//
+//            manager.cancel(pendingIntent);
+//            manager.setInexactRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP, PERIOD, AlarmManager.INTERVAL_HOUR, pendingIntent);
+//            Log.d("TEST", "start service" + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date(PROPER_START_TIME)));
 //        }
     }
 

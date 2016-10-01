@@ -7,7 +7,6 @@ import com.activeandroid.query.Select;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
@@ -56,7 +55,7 @@ public class ActiveHotShots extends Model implements Comparable<ActiveHotShots>{
     @Column(name = HOT_SHOT_WEB_ID)
     public int hotShotWebId;
 
-    ActiveHotShots(){
+    public ActiveHotShots(){
         super();
     }
 

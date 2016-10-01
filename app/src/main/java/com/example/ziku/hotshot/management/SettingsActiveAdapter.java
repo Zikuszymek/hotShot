@@ -80,8 +80,10 @@ public class SettingsActiveAdapter extends ArrayAdapter<ActiveWebSites>{
 
                 List<ActiveHotShots> activeWebSitesList = ActiveHotShots.ReturnAllActiveHotShotsActive();
                 HotShotsActiveAdapter hotShotsAdapter = new HotShotsActiveAdapter(getContext(), activeWebSitesList);
-                hotShotListVIew.setAdapter(null);
-                hotShotListVIew.setAdapter(hotShotsAdapter);
+                if (hotShotListVIew != null) {
+                    hotShotListVIew.setAdapter(null);
+                    hotShotListVIew.setAdapter(hotShotsAdapter);
+                }
             }
         });
 

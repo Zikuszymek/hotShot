@@ -44,9 +44,9 @@ public class HotShotService extends Service{
     Void cos;
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        PowerManager.WakeLock wakelock;
-        WifiManager.WifiLock wifiLock;
-
+//        PowerManager.WakeLock wakelock;
+//        WifiManager.WifiLock wifiLock;
+//
 //        PowerManager mgr = (PowerManager) getSystemService(Context.POWER_SERVICE);
 //        wakelock = mgr.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK,"HOTSHOT");
 //        wakelock.acquire();
@@ -58,7 +58,7 @@ public class HotShotService extends Service{
 
 //        ConnectivityManager connectivityManager = (ConnectivityManager)getSystemService(Context.CONNECTIVITY_SERVICE);
 //        HotShotAlarmReceiver.wakeUpMothaFucka(this);
-        SendNotification("cos","cos",this);
+//        SendNotification("cos","cos",this);
 
         Log.d("TEST","service started to run");
         try {

@@ -5,6 +5,7 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE"/>
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
@@ -14,7 +15,7 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
-        android:name="com.activeandroid.app.Application" >
+        android:name="com.activeandroid.app.Application">
         <meta-data android:name="AA_DB_NAME" android:value="hot_Shot_active.db" />
         <meta-data android:name="AA_DB_VERSION" android:value="1" />
         <meta-data android:name="AA_MODELS" android:value="com.example.ziku.hotshot.tables.ActiveWebSites, com.example.ziku.hotshot.tables.ActiveHotShots"/>
@@ -28,17 +29,15 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".management.ShowImageActivity" android:theme="@style/PopupActivity"/>
+        <activity android:name=".management.ShowImageActivity"/>
 
         <service
             android:name=".services.HotShotService"
             android:enabled="true"
             android:exported="false"
-            android:label="@string/serviceName"
-            android:process=":HotShotService" />
+            android:label="@string/serviceName" />
+        <receiver android:name=".services.HotShotAlarmReceiver"/>
 
-        <receiver android:name=".services.HotShotAlarmReceiver"
-            android:process=":HotShotService"/>
     </application>
 
 </manifest>

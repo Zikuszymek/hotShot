@@ -1,5 +1,6 @@
 package com.example.ziku.hotshot.services;
 
+import android.app.AlarmManager;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -15,10 +16,17 @@ import android.util.Log;
 import com.example.ziku.hotshot.MainActivity;
 import com.example.ziku.hotshot.R;
 
+import java.util.Calendar;
+
 /**
  * Created by Ziku on 2016-08-24.
  */
 public class HotShotAlarmReceiver extends BroadcastReceiver{
+
+    private static int REQUEST_CODE = 12345;
+    AlarmManager alarmManager;
+    PendingIntent pendingIntent;
+
 //    @Override
 //    public void onReceive(Context context, Intent intent) {
 //        Log.d("TEST0","receiver");
@@ -65,9 +73,22 @@ public class HotShotAlarmReceiver extends BroadcastReceiver{
 
     @Override
     public void onReceive(Context context, Intent intent) {
+        Log.d("TEST0","receiver");
         wakeUpMothaFucka(context);
         Intent service = new Intent(context,HotShotService.class);
         context.startService(service);
     }
 
+    public  void SetAlarmManager(Context context){
+        Log.d("TEST","setting alarm");
+        long PERIOD = 2 * 60 * 1000;
+        long TIMER = 60 * 60 * 1000;
+//        long PROPER_START_TIME = (System.currentTimeMillis()-(Calendar.getInstance().get(Calendar.MINUTE)*60*1000)) + (PERIOD) + TIMER;
+        long PROPER_START_TIME = System.currentTimeMillis() + PERIOD;
+        alarmManager = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
+        Intent intent = new Intent(context,HotShotAlarmReceiver.class);
+        pendingIntent = PendingIntent.getBroadcast(context, REQUEST_CODE,intent,0);
+        alarmManager.cancel(pendingIntent);
+        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP,PROPER_START_TIME, TIMER,pendingIntent);
+    }
 }
