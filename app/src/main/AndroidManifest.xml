@@ -29,7 +29,8 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".management.ShowImageActivity"/>
+        <activity android:name=".management.ShowImageActivity"
+            android:theme="@style/PopupActivity"/>
 
         <service
             android:name=".services.HotShotService"

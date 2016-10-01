@@ -68,10 +68,10 @@ public abstract class WebPage {
         Document document;
         try {
             Connection.Response respone = Jsoup.connect(WEB_PAGE_URL)
-                    .ignoreContentType(true)
-                    .userAgent("Mozilla/5.0 (Android; Tablet; rv:20.0) Gecko/20.0 Firefox/20.0")
+                    .ignoreContentType(false)
+                    .userAgent("Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:25.0) Gecko/20100101 Firefox/25.0")
                     .referrer("http://www.google.com").timeout(12000)
-                    .followRedirects(true)
+                    .followRedirects(false)
                     .execute();
 
             document = respone.parse();

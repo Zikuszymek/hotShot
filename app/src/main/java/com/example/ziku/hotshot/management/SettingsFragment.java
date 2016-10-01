@@ -34,12 +34,12 @@ public class SettingsFragment extends Fragment{
 
         List<ActiveWebSites> activeWebSitesList = new Select().from(ActiveWebSites.class).execute();
         SettingsActiveAdapter settingsAdapter = new SettingsActiveAdapter(getContext(),activeWebSitesList,hotShotListView);
-        listView.setAdapter(settingsAdapter);
         if(listView.getHeaderViewsCount()==0){
             LayoutInflater layoutInflater = getActivity().getLayoutInflater();
             ViewGroup header = (ViewGroup) layoutInflater.inflate(R.layout.settings_header,listView,false);
             listView.addHeaderView(header,null,false);
         }
+        listView.setAdapter(settingsAdapter);
     }
 
 }

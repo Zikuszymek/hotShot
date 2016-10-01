@@ -136,12 +136,12 @@ public class MainActivity extends FragmentActivity {
             @Override
             public void onClick(View view) {
 
-                refreshButton.setClickable(false);
-                refreshButton.setBackgroundColor(whiteColor);
-                refreshButton.setImageResource(R.drawable.orange_refresh);
-                refreshButton.startAnimation(AnimationUtils.loadAnimation(context,R.anim.rotate));
-                Toast refreshToast = Toast.makeText(context,R.string.refreshing,Toast.LENGTH_SHORT);
-                refreshToast.show();
+//                refreshButton.setClickable(false);
+//                refreshButton.setBackgroundColor(whiteColor);
+//                refreshButton.setImageResource(R.drawable.orange_refresh);
+//                refreshButton.startAnimation(AnimationUtils.loadAnimation(context,R.anim.rotate));
+//                Toast refreshToast = Toast.makeText(context,R.string.refreshing,Toast.LENGTH_SHORT);
+//                refreshToast.show();
                 ActiveAsyncRefresh activeAsyncRefresh = new ActiveAsyncRefresh( getApplicationContext(), new Runnable() {
                     @Override
                     public void run() {
@@ -155,11 +155,11 @@ public class MainActivity extends FragmentActivity {
                         refreshButton.clearAnimation();
                     }
                 }, true);
-                activeAsyncRefresh.execute(ActiveORMmanager.X_KOM, ActiveORMmanager.KOMPUTRONIK, ActiveORMmanager.SATYSFAKCJA,
-                        ActiveORMmanager.MORELE, ActiveORMmanager.PROLINE, ActiveORMmanager.HELION);
-//                activeAsyncRefresh.execute(ActiveORMmanager.MALL);
-//                TestClass testClass = new TestClass();
-//                testClass.execute();
+//                activeAsyncRefresh.execute(ActiveORMmanager.X_KOM, ActiveORMmanager.KOMPUTRONIK, ActiveORMmanager.SATYSFAKCJA,
+//                        ActiveORMmanager.MORELE, ActiveORMmanager.PROLINE, ActiveORMmanager.HELION);
+////                activeAsyncRefresh.execute(ActiveORMmanager.MALL);
+                TestClass testClass = new TestClass();
+                testClass.execute();
             }
         });
 
