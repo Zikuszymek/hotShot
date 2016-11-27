@@ -1,98 +1,74 @@
 package com.example.ziku.hotshot;
 
-import android.app.AlarmManager;
-import android.app.PendingIntent;
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.database.Cursor;
 import android.graphics.Color;
-import android.net.ConnectivityManager;
 import android.os.Bundle;
-import android.os.SystemClock;
-import android.support.v4.app.FragmentActivity;
+import android.support.design.widget.NavigationView;
+import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.DrawableUtils;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.animation.AnimationUtils;
 import android.widget.ImageButton;
 import android.widget.ListView;
-import android.widget.Toast;
 
 
 import com.example.ziku.hotshot.management.HotShotsActiveAdapter;
-import com.example.ziku.hotshot.management.SettingsActiveAdapter;
 import com.example.ziku.hotshot.management.SwipeViewAdapter;
-import com.example.ziku.hotshot.management.TestClass;
-import com.example.ziku.hotshot.services.ActiveAsyncRefresh;
 import com.example.ziku.hotshot.services.HotShotAlarmReceiver;
 import com.example.ziku.hotshot.tables.ActiveHotShots;
-import com.example.ziku.hotshot.tables.ActiveORMmanager;
 
-import java.sql.Time;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 
-public class MainActivity extends FragmentActivity {
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
 
-    private ListView hotShotListView;
-    private HotShotsActiveAdapter hotShotsAdapter;
-    private SettingsActiveAdapter settingsAdapter;
-    private ImageButton refreshButton;
-    private ImageButton hotShotButton;
-    private ImageButton settingButton;
-    private Cursor mainCursor;
-    private Cursor settingCursor;
-    private ConnectivityManager connectivityManager;
-    private Context context;
+    private ImageButton allButton;
+    private ImageButton electronicButton;
+    private ImageButton otherButton;
+    private ImageButton bookButton;
     private int whiteColor;
     private int orangeColor;
-    private LayoutInflater layoutInflater;
-    private ViewGroup header;
     private SwipeViewAdapter swipeViewAdapter;
     private ViewPager viewPager;
-    private boolean hotShotRefreshSeted;
-    private SharedPreferences sharedPreferences;
-
-    private static final String DATABASE_WAS_CREATED = "DATABASE_WAS_CREATED";
 
     public static boolean APP_IS_RUNNING = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.main);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_hotshot);
+        setSupportActionBar(toolbar);
+
+        DrawerLayout drawerLayout = (DrawerLayout)findViewById(R.id.drawer_layout);
+        ActionBarDrawerToggle toogle = new ActionBarDrawerToggle(
+                this, drawerLayout, toolbar, R.string.open_drawer,R.string.close_drawer);
+        drawerLayout.addDrawerListener(toogle);
+        toogle.syncState();
+
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(this);
 
         Log.d("TEST","On Create");
 
-        sharedPreferences = getPreferences(Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        if(!sharedPreferences.getBoolean(DATABASE_WAS_CREATED,false)) {
-            Log.d("ACTIVE","Adding elements to database");
-            ActiveORMmanager.AddWebsitesIfNotExists();
-            ActiveORMmanager.AddStaticHotShots();
-            editor.putBoolean(DATABASE_WAS_CREATED,true);
-            editor.commit();
-        }
-
-        refreshButton = (ImageButton) findViewById(R.id.refresh_button);
-        settingButton = (ImageButton) findViewById(R.id.settings_button);
-        hotShotButton = (ImageButton) findViewById(R.id.hot_shots_button);
+        allButton = (ImageButton) findViewById(R.id.all_button);
+        electronicButton = (ImageButton) findViewById(R.id.electronic_button);
+        otherButton = (ImageButton) findViewById(R.id.others_button);
+        bookButton = (ImageButton) findViewById(R.id.books_button);
         whiteColor = Color.parseColor("#FFFFFF");
         orangeColor = Color.parseColor("#FF6600");
-        context = this;
-        layoutInflater = getLayoutInflater();
-        connectivityManager = (ConnectivityManager)getSystemService(Context.CONNECTIVITY_SERVICE);
 
         swipeViewAdapter = new SwipeViewAdapter(getSupportFragmentManager());
         viewPager = (ViewPager) findViewById(R.id.viewPager);
         viewPager.setAdapter(swipeViewAdapter);
 
-        SetHotShotButtonActive();
+        SetAllHSButtonActive();
 
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
@@ -101,19 +77,23 @@ public class MainActivity extends FragmentActivity {
 
             @Override
             public void onPageSelected(int position) {
+                SetAllButtonsNormal();
                 switch (position){
                     case 0:
-                        SetHotShotButtonActive();
-                        SetSettingsButtonNormal();
+                        SetAllHSButtonActive();
                         Log.d("SWIPE","SWIPE 1");
                         break;
                     case 1:
-                        SetSettingsButtonActive();
-                        SetHotShotButtonNormal();
+                        SetElectronicHSButtonActive();
                         Log.d("SWIPE","SWIPE 2");
-                        if(!hotShotRefreshSeted) {
-                            hotShotRefreshSeted = true;
-                        }
+                        break;
+                    case 2:
+                        SetOtherHSButtonActive();
+                        Log.d("SWIPE","SWIPE 3");
+                        break;
+                    case 3:
+                        SetBookHSButtonActive();
+                        Log.d("SWIPE","SWIPE 4");
                         break;
                 }
             }
@@ -123,55 +103,100 @@ public class MainActivity extends FragmentActivity {
             }
         });
 
-        hotShotButton.setOnClickListener(new View.OnClickListener() {
+      /*  swipeRefreshAll = (SwipeRefreshLayout)findViewById(R.id.swipe_refresh_all);
+        swipeRefreshElectronic = (SwipeRefreshLayout)findViewById(R.id.swipe_refresh_electronic);
+        swipeRefreshOther = (SwipeRefreshLayout)findViewById(R.id.swipe_refresh_others);
+        swipeRefreshBook = (SwipeRefreshLayout)findViewById(R.id.swipe_refresh_books);
+
+        swipeRefreshAll.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                RefrehsAllListsData();
+            }
+        });
+        */
+
+        allButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 viewPager.setCurrentItem(0,true);
-                SetHotShotButtonActive();
-                SetSettingsButtonNormal();
+                SetAllButtonsNormal();
+                SetAllHSButtonActive();
             }
         });
 
-        refreshButton.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View view) {
-
-                refreshButton.setClickable(false);
-                refreshButton.setBackgroundColor(whiteColor);
-                refreshButton.setImageResource(R.drawable.orange_refresh);
-                refreshButton.startAnimation(AnimationUtils.loadAnimation(context,R.anim.rotate));
-                Toast refreshToast = Toast.makeText(context,R.string.refreshing,Toast.LENGTH_SHORT);
-                refreshToast.show();
-                ActiveAsyncRefresh activeAsyncRefresh = new ActiveAsyncRefresh( getApplicationContext(), new Runnable() {
-                    @Override
-                    public void run() {
-
-                        ListView listView = (ListView) findViewById(R.id.hot_shot_swipe_list);
-                        hotShotsAdapter = new HotShotsActiveAdapter(context, ActiveHotShots.ReturnAllActiveHotShotsActive());
-                        listView.setAdapter(hotShotsAdapter);
-                        refreshButton.setClickable(true);
-                        refreshButton.setBackgroundColor(orangeColor);
-                        refreshButton.setImageResource(R.drawable.refresh);
-                        refreshButton.clearAnimation();
-                    }
-                }, true);
-                activeAsyncRefresh.execute(ActiveORMmanager.X_KOM, ActiveORMmanager.KOMPUTRONIK, ActiveORMmanager.SATYSFAKCJA,
-                        ActiveORMmanager.MORELE, ActiveORMmanager.PROLINE, ActiveORMmanager.HELION);
-//                activeAsyncRefresh.execute(ActiveORMmanager.MALL);
-//                TestClass testClass = new TestClass();
-//                testClass.execute();
-            }
-        });
-
-        settingButton.setOnClickListener(new View.OnClickListener() {
+        electronicButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 viewPager.setCurrentItem(1,true);
-                SetSettingsButtonActive();
-                SetHotShotButtonNormal();
-           }
+                SetAllButtonsNormal();
+                SetElectronicHSButtonActive();
+            }
         });
 
+        otherButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                viewPager.setCurrentItem(2,true);
+                SetAllButtonsNormal();
+                SetOtherHSButtonActive();
+            }
+        });
+
+        bookButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                viewPager.setCurrentItem(3,true);
+                SetAllButtonsNormal();
+                SetBookHSButtonActive();
+            }
+        });
+
+//                JsonCategoriesAsync jsonCategoriesAsync = new JsonCategoriesAsync();
+//                try {
+//                    Void cos = jsonCategoriesAsync.execute().get();
+//                } catch (Exception ex) {
+//
+//                }
+//
+//                JsonWebPagesAsync webPagesAsync = new JsonWebPagesAsync();
+//                try {
+//                   Void cos = webPagesAsync.execute().get();
+//                } catch (Exception ex) {
+//
+//                }
+//
+//                JsonHotShotsAsync hotShotsAsync = new JsonHotShotsAsync();
+//                hotShotsAsync.execute();
+
+
+    }
+
+    @Override
+    public boolean onNavigationItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        switch (id){
+            case R.id.okazje:
+                break;
+            case R.id.strony:
+                Intent openSettingsActivity = new Intent(this,SettingsActivity.class);
+                startActivity(openSettingsActivity);
+                break;
+            case R.id.informacje:
+                break;
+            case R.id.napisz:
+                Intent intent = new Intent(Intent.ACTION_SEND);
+                intent.setType("text/html");
+                intent.putExtra(Intent.EXTRA_EMAIL,"zikuszymek@o2.pl");
+                intent.putExtra(Intent.EXTRA_SUBJECT, "test");
+                intent.putExtra(Intent.EXTRA_TEXT, "ytedg");
+
+                startActivity(Intent.createChooser(intent,""));
+                break;
+        }
+        DrawerLayout drawerLayout = (DrawerLayout)findViewById(R.id.drawer_layout);
+        drawerLayout.closeDrawer(GravityCompat.START);
+        return true;
     }
 
     @Override
@@ -201,7 +226,7 @@ public class MainActivity extends FragmentActivity {
     private void SetHotShotsListView() {
         ListView listView = (ListView) findViewById(R.id.hot_shot_swipe_list);
         if (listView != null) {
-            List<ActiveHotShots> activeWebSitesList = ActiveHotShots.ReturnAllActiveHotShotsActive();
+            List<ActiveHotShots> activeWebSitesList = ActiveHotShots.ReturnAllActiveHotShotsActive(0);
             HotShotsActiveAdapter hotShotsAdapter = new HotShotsActiveAdapter(this, activeWebSitesList);
             listView.setAdapter(null);
             listView.setAdapter(hotShotsAdapter);
@@ -212,41 +237,40 @@ public class MainActivity extends FragmentActivity {
     private void SetServiceAlarmManager() {
         HotShotAlarmReceiver alarmReceiver = new HotShotAlarmReceiver();
         alarmReceiver.SetAlarmManager(this);
-//        Log.d("TEST", "check if service can be started");
-
-//            long TIMER = 60 * 60 * 1000L;
-//            long PERIOD = 2 * 60 * 1000L;
-//            long PROPER_START_TIME = SystemClock.elapsedRealtime() + PERIOD;
-//            long PROPER_START_TIME = (System.currentTimeMillis()-(Calendar.getInstance().get(Calendar.MINUTE)*60*1000)) + (PERIOD) + TIMER;
-
-
-//            AlarmManager manager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-//            Intent serviceIntent = new Intent(MainActivity.this, HotShotAlarmReceiver.class);
-//            PendingIntent pendingIntent = PendingIntent.getBroadcast(MainActivity.this, 1113, serviceIntent, PendingIntent.FLAG_CANCEL_CURRENT);
-//
-//            manager.cancel(pendingIntent);
-//            manager.setInexactRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP, PERIOD, AlarmManager.INTERVAL_HOUR, pendingIntent);
-//            Log.d("TEST", "start service" + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date(PROPER_START_TIME)));
-//        }
     }
 
-    private void SetSettingsButtonActive(){
-        settingButton.setBackgroundColor(whiteColor);
-        settingButton.setImageResource(R.drawable.settings_orange);
+    private void SetAllHSButtonActive(){
+        allButton.setBackgroundColor(whiteColor);
+        allButton.setImageResource(R.drawable.hotshot_button_orange);
     }
 
-    private void SetHotShotButtonActive(){
-        hotShotButton.setBackgroundColor(whiteColor);
-        hotShotButton.setImageResource(R.drawable.hot_shot_orange);
+    private void SetElectronicHSButtonActive(){
+        electronicButton.setBackgroundColor(whiteColor);
+        electronicButton.setImageResource(R.drawable.electronic_button_orange);
     }
 
-    private void SetSettingsButtonNormal(){
-        settingButton.setBackgroundColor(orangeColor);
-        settingButton.setImageResource(R.drawable.settings);
+    private void SetOtherHSButtonActive(){
+        otherButton.setBackgroundColor(whiteColor);
+        otherButton.setImageResource(R.drawable.other_button_orange);
     }
 
-    private void SetHotShotButtonNormal(){
-        hotShotButton.setBackgroundColor(orangeColor);
-        hotShotButton.setImageResource(R.drawable.hot_shot_white);
+    private void SetBookHSButtonActive(){
+        bookButton.setImageResource(R.drawable.books_button_orange);
+        bookButton.setBackgroundColor(whiteColor);
+    }
+
+    private void SetAllButtonsNormal(){
+        bookButton.setImageResource(R.drawable.books_button_white);
+        bookButton.setBackgroundColor(orangeColor);
+        otherButton.setBackgroundColor(orangeColor);
+        otherButton.setImageResource(R.drawable.other_button_white);
+        electronicButton.setBackgroundColor(orangeColor);
+        electronicButton.setImageResource(R.drawable.electronic_button_white);
+        allButton.setBackgroundColor(orangeColor);
+        allButton.setImageResource(R.drawable.hotshot_button_white);
+    }
+
+    private void RefrehsAllListsData(){
+        int i = 1;
     }
 }

@@ -1,6 +1,7 @@
 <resources>
 
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="colorPrimary">#FF60</item>
     </style>
 
     <style name="PopupActivity" parent="Theme.AppCompat.DayNight.DarkActionBar">

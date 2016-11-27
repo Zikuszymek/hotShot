@@ -7,4 +7,20 @@
     <string name="notify">POWIADOM</string>
     <string name="title_activity_show_image">ShowImage</string>
     <string name="refreshing">Odświeżanie</string>
+    <string name="wszystko">wszystko</string>
+    <string name="elektornika">sprzęt</string>
+    <string name="różne">różne</string>
+    <string name="ksi_ki">książki</string>
+    <string name="title_activity_main2">Main2Activity</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="action_settings">Settings</string>
+    <string name="strony">Strony i powiadomienia</string>
+    <string name="o_aplikacji">O aplikacji</string>
+    <string name="napisz_do_nas">Napisz do nas</string>
+    <string name="open_drawer">Open navigation drawer</string>
+    <string name="close_drawer">Close navigation drawer</string>
+    <string name="okazje">Okazje</string>
 </resources>

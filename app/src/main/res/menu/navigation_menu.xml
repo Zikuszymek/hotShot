@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/okazje"
+            android:icon="@drawable/hot_shot_orange"
+            android:title="@string/okazje"/>
+        <item
+            android:id="@+id/strony"
+            android:icon="@drawable/settings_orange"
+            android:title="@string/strony"/>
+        <item
+            android:id="@+id/informacje"
+            android:icon="@drawable/icon_info_oragne"
+            android:title="@string/o_aplikacji"/>
+        <item
+            android:id="@+id/napisz"
+            android:icon="@drawable/mail_icon_orange"
+            android:title="@string/napisz_do_nas"/>
+    </group>
+</menu>

@@ -14,7 +14,6 @@ import android.util.Log;
 
 import com.example.ziku.hotshot.MainActivity;
 import com.example.ziku.hotshot.R;
-import com.example.ziku.hotshot.webpages.ActiveWebPageFabric;
 
 /**
  * Created by Ziku on 2016-09-14.
@@ -22,13 +21,13 @@ import com.example.ziku.hotshot.webpages.ActiveWebPageFabric;
 public class ActiveAsyncRefresh extends AsyncTask<String, Void, Void>{
 
     private Context context;
-    private ActiveWebPageFabric activeWebPageFabric;
+//    private ActiveWebPageFabric activeWebPageFabric;
     private Runnable postExecute = null;
     private boolean forced;
 
     public ActiveAsyncRefresh(Context context,Runnable postExecute,boolean forced){
         this.context = context;
-        this.activeWebPageFabric = new ActiveWebPageFabric(context);
+//        this.activeWebPageFabric = new ActiveWebPageFabric(context);
         this.postExecute = postExecute;
         this.forced = forced;
     }
@@ -48,15 +47,15 @@ public class ActiveAsyncRefresh extends AsyncTask<String, Void, Void>{
                 if (networkInfo.isConnectedOrConnecting()) {
                     Log.d("TEST", "Connected or connecting");
                     Log.d("TEST", "Processing " + webpage);
-                    notification = activeWebPageFabric.UpgradeSomeHotShot(webpage, forced);
+                  //  notification = activeWebPageFabric.UpgradeSomeHotShot(webpage, forced);
 
-                    if (notification != null) {
-                        try {
-                            notificationToSend = notification;
-                        } catch (Exception ex) {
-                            Log.d("TEST", webpage + " cos sie spierdolilo: " + ex);
-                        }
-                    }
+//                    if (notification != null) {
+//                        try {
+//                            notificationToSend = notification;
+//                        } catch (Exception ex) {
+//                            Log.d("TEST", webpage + " cos sie spierdolilo: " + ex);
+//                        }
+//                    }
                 } else {Log.d("TEST","No internet connection");}
             } else {Log.d("TEST","Network info is null");}
         }

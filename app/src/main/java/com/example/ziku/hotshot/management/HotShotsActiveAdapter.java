@@ -66,7 +66,7 @@ public class HotShotsActiveAdapter extends ArrayAdapter<ActiveHotShots> {
                 Uri uri = Uri.fromFile(file);
                 imageView.setImageURI(uri);
             } else {
-                imageView.setImageResource(R.drawable.hot_shot_orange_icon_);
+                imageView.setImageResource(R.drawable.hot_shot_icon);
             }
         }
 

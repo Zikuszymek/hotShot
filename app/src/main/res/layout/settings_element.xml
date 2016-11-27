@@ -50,7 +50,7 @@
                 android:layout_height="40dp"
                 android:button="@null"
                 android:background="@drawable/check_box"
-               />
+                />
         </LinearLayout>
     </LinearLayout>
     <View
@@ -60,3 +60,4 @@
         android:layout_marginRight="4dp"
         android:layout_marginLeft="4dp" />
 </LinearLayout>
+

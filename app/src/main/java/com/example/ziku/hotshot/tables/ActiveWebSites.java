@@ -21,8 +21,8 @@ public class ActiveWebSites extends Model{
     public static final String WEB_SITE_URL = "web_site_url";
     public static final String IS_ACTIVE = "is_active";
     public static final String NOTIFY_USER = "notify_user";
-    public static final String TIME_PERIOD = "time_period";
-    public static final String LAST_CHECK = "last_check";
+    public static final String ACTIVE_FROM_SERVER = "active_from_server";
+    public static final String WEB_CATEGORY = "web_category";
 
     @Column(name = WEB_SITE_NAME)
     public String webSiteName;
@@ -36,23 +36,23 @@ public class ActiveWebSites extends Model{
     @Column(name = NOTIFY_USER)
     public boolean notifyUser;
 
-    @Column(name = TIME_PERIOD)
-    public long timePeriod;
+    @Column(name = ACTIVE_FROM_SERVER)
+    public boolean activeFromServer;
 
-    @Column(name = LAST_CHECK)
-    public Date lastCheck;
+    @Column(name = WEB_CATEGORY)
+    public ActiveCategories activeCategory;
 
     public ActiveWebSites(){
         super();
     }
 
-    public ActiveWebSites(String webSiteName, String webSIteUrl, boolean isActive, boolean notifyUser, long timePeriod, Date lastCheck) {
-        this.lastCheck = lastCheck;
+    public ActiveWebSites(String webSiteName, String webSIteUrl, boolean isActive, boolean notifyUser, boolean activeFromServer, ActiveCategories activeCategory) {
+        this.activeCategory = activeCategory;
         this.webSiteName = webSiteName;
         this.webSIteUrl = webSIteUrl;
         this.isActive = isActive;
         this.notifyUser = notifyUser;
-        this.timePeriod = timePeriod;
+        this.activeFromServer = activeFromServer;
     }
 
     public static Cursor getAllAsCursor(){

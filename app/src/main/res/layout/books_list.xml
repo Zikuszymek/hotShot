@@ -4,11 +4,11 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
     <android.support.v4.widget.SwipeRefreshLayout
-        android:id="@+id/swipe_refresh_all"
+        android:id="@+id/swipe_refresh_books"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
             <ListView
-            android:id="@+id/hot_shot_swipe_list"
+            android:id="@+id/books_swipe_list"
             android:layout_marginBottom="2dp"
             android:layout_marginLeft="2dp"
             android:layout_marginRight="2dp"

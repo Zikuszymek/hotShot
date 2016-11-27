@@ -1,9 +1,7 @@
 package com.example.ziku.hotshot.management;
 
-
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -17,25 +15,26 @@ import com.example.ziku.hotshot.tables.ActiveHotShots;
 import java.util.List;
 
 /**
- * Created by Ziku on 2016-08-31.
+ * Created by Ziku on 2016-11-19.
  */
-public class HotShotsFragment extends Fragment{
+
+public class HotShotOthersFragment extends Fragment {
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-       return inflater.inflate(R.layout.hots_shots_list,container,false);
+        return inflater.inflate(R.layout.others_list,container,false);
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+
         Log.d("SWIPE","Fragment HotShot Created");
         super.onActivityCreated(savedInstanceState);
-            ListView listView = (ListView) getActivity().findViewById(R.id.hot_shot_swipe_list);
-            List<ActiveHotShots> activeWebSitesList =  ActiveHotShots.ReturnAllActiveHotShotsActive();// new Select().from(ActiveHotShots.class).where(ActiveHotShots.PRODUCT_NAME + " != ?", ActiveORMmanager.EMPTY).execute();
-            HotShotsActiveAdapter hotShotsAdapter = new HotShotsActiveAdapter(getContext(), activeWebSitesList);
-            listView.setAdapter(null);
-            listView.setAdapter(hotShotsAdapter);
+        ListView listView = (ListView) getActivity().findViewById(R.id.others_swipe_list);
+        List<ActiveHotShots> activeWebSitesList =  ActiveHotShots.ReturnAllActiveHotShotsActive(3);
+        HotShotsActiveAdapter hotShotsAdapter = new HotShotsActiveAdapter(getContext(), activeWebSitesList);
+        listView.setAdapter(null);
+        listView.setAdapter(hotShotsAdapter);
     }
-
 }

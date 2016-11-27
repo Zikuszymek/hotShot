@@ -1,9 +1,12 @@
 package com.example.ziku.hotshot.tables;
 
+import android.util.Log;
+
 import com.activeandroid.Model;
 import com.activeandroid.annotation.Table;
 import com.activeandroid.annotation.Column;
 import com.activeandroid.query.Select;
+import com.example.ziku.hotshot.jsonservices.JsonUpdateDB;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -24,12 +27,8 @@ public class ActiveHotShots extends Model implements Comparable<ActiveHotShots>{
     public static final String IMG_URL = "img_url";
     public static final String PRODUCT_URL = "product_url";
     public static final String WEB_SITE_ID = "web_site_id";
+    public static final String LAST_NEW_CHANGE = "last_new_change";
     public static final String LAST_NOTYFICATION = "last_notyfication";
-
-    public static final int ID_0 = 0;
-    public static final int ID_1 = 1;
-    public static final int ID_2 = 2;
-    public static final int ID_3 = 3;
 
     @Column(name = PRODUCT_NAME)
     public String productName;
@@ -52,15 +51,15 @@ public class ActiveHotShots extends Model implements Comparable<ActiveHotShots>{
     @Column(name = LAST_NOTYFICATION)
     public String lastNotyfication;
 
-    @Column(name = HOT_SHOT_WEB_ID)
-    public int hotShotWebId;
+    @Column(name = LAST_NEW_CHANGE)
+    public Date lastNewChange;
+
 
     public ActiveHotShots(){
         super();
     }
 
-    public ActiveHotShots(int hotShotWebId, String productName, int oldPrice, int newPrice, String imgUrl, String productUrl, ActiveWebSites webSites, String lastNotyfication) {
-        this.hotShotWebId = hotShotWebId;
+    public ActiveHotShots( String productName, int oldPrice, int newPrice, String imgUrl, String productUrl, ActiveWebSites webSites, String lastNotyfication, Date lastNewChange) {
         this.productName = productName;
         this.oldPrice = oldPrice;
         this.newPrice = newPrice;
@@ -68,24 +67,37 @@ public class ActiveHotShots extends Model implements Comparable<ActiveHotShots>{
         this.productUrl = productUrl;
         this.webSites = webSites;
         this.lastNotyfication = lastNotyfication;
+        this.lastNewChange = lastNewChange;
     }
 
     @Override
     public int compareTo(ActiveHotShots activeHotShots) {
-        Date date1 = activeHotShots.webSites.lastCheck;
-        Date date2 = this.webSites.lastCheck;
-        if(date1.after(date2)){
-            return 1;
-        } else return -1;
+      //  Date date1 = activeHotShots.webSites.lastCheck;
+        //Date date2 = this.webSites.lastCheck;
+      //  if(date1.after(date2)){
+      //      return 1;
+      //  } else return -1;
+        return 1;
     }
 
 
-    public static List<ActiveHotShots> ReturnAllActiveHotShotsActive(){
-        List<ActiveHotShots> activeHotShotses = new Select().from(ActiveHotShots.class).where(ActiveHotShots.PRODUCT_NAME + " != ?", ActiveORMmanager.EMPTY).execute();
+    public static List<ActiveHotShots> ReturnAllActiveHotShotsActive(int category){
+
+        List<ActiveHotShots> activeHotShotses;
+        activeHotShotses = new Select().from(ActiveHotShots.class).where(ActiveHotShots.PRODUCT_NAME + " != ?", JsonUpdateDB.EMPTY).execute();
+
         List<ActiveHotShots> returnList = new ArrayList<>();
         for (ActiveHotShots active :activeHotShotses) {
-            if(active.webSites.isActive == true){
-                returnList.add(active);
+            Log.d("ACTIVE",active.productName + " "  + active.webSites.activeFromServer);
+            if(active.webSites.isActive){
+                if(category == 0) {
+                      returnList.add(active);
+                }
+                else {
+                    ActiveCategories activeCategories = ActiveCategories.load(ActiveCategories.class, category);
+                    if(activeCategories.categoryType == active.webSites.activeCategory.categoryType)
+                        returnList.add(active);
+                }
             }
         }
         Collections.sort(returnList);

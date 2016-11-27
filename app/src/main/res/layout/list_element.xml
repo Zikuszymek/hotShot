@@ -48,6 +48,7 @@
                 android:id="@+id/product_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:textSize="15sp"
                 android:paddingBottom="5sp"
                 android:paddingTop="5sp"
                 android:paddingLeft="10sp"

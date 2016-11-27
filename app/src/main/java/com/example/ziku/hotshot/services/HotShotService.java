@@ -4,22 +4,16 @@ import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
-import android.app.TaskStackBuilder;
 import android.content.Context;
 import android.content.Intent;
-import android.net.ConnectivityManager;
-import android.net.wifi.WifiManager;
 import android.os.Binder;
 import android.os.IBinder;
-import android.os.PowerManager;
 import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
 import com.example.ziku.hotshot.MainActivity;
 import com.example.ziku.hotshot.R;
-import com.example.ziku.hotshot.WebPageFabric;
-import com.example.ziku.hotshot.tables.ActiveORMmanager;
 
 /**
  * Created by Ziku on 2016-07-31.
@@ -63,8 +57,7 @@ public class HotShotService extends Service{
         Log.d("TEST","service started to run");
         try {
             ActiveAsyncRefresh activeAsyncRefresh = new ActiveAsyncRefresh(this,null,false);
-            cos = activeAsyncRefresh.execute(ActiveORMmanager.X_KOM, ActiveORMmanager.KOMPUTRONIK, ActiveORMmanager.SATYSFAKCJA,
-                        ActiveORMmanager.MORELE, ActiveORMmanager.PROLINE, ActiveORMmanager.HELION).get();
+            cos = activeAsyncRefresh.execute().get();
         }catch (Exception ex){
             Log.d("TEST","DUPA: "+ ex);
         }

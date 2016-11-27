@@ -1,36 +1,30 @@
 package com.example.ziku.hotshot.management;
 
 import android.content.Context;
-import android.database.Cursor;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
-import android.widget.CursorAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.activeandroid.query.Select;
 import com.example.ziku.hotshot.R;
 import com.example.ziku.hotshot.tables.ActiveHotShots;
-import com.example.ziku.hotshot.tables.ActiveORMmanager;
 import com.example.ziku.hotshot.tables.ActiveWebSites;
-import com.example.ziku.hotshot.webpages.ActiveWebPageFabric;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by Ziku on 2016-08-29.
  */
 public class SettingsActiveAdapter extends ArrayAdapter<ActiveWebSites>{
-    private ListView hotShotListVIew;
+//    private ListView hotShotListVIew;
 
-    public SettingsActiveAdapter(Context context, List<ActiveWebSites> activeSettings, ListView hotShotListVIew) {
+    public SettingsActiveAdapter(Context context, List<ActiveWebSites> activeSettings) {
         super(context, 0, activeSettings);
-        this.hotShotListVIew = hotShotListVIew;
+//        this.hotShotListVIew = hotShotListVIew;
     }
 
 
@@ -78,12 +72,12 @@ public class SettingsActiveAdapter extends ArrayAdapter<ActiveWebSites>{
                     checkBox2.setEnabled(false);
                 }
 
-                List<ActiveHotShots> activeWebSitesList = ActiveHotShots.ReturnAllActiveHotShotsActive();
+                List<ActiveHotShots> activeWebSitesList = ActiveHotShots.ReturnAllActiveHotShotsActive(0);
                 HotShotsActiveAdapter hotShotsAdapter = new HotShotsActiveAdapter(getContext(), activeWebSitesList);
-                if (hotShotListVIew != null) {
-                    hotShotListVIew.setAdapter(null);
-                    hotShotListVIew.setAdapter(hotShotsAdapter);
-                }
+//                if (hotShotListVIew != null) {
+//                    hotShotListVIew.setAdapter(null);
+//                    hotShotListVIew.setAdapter(hotShotsAdapter);
+//                }
             }
         });
 
