@@ -7,9 +7,6 @@ import com.activeandroid.Model;
 import com.activeandroid.annotation.Column;
 import com.activeandroid.annotation.Table;
 import com.activeandroid.query.Select;
-import com.example.ziku.hotshot.services.ActiveAsyncRefresh;
-
-import java.util.Date;
 
 /**
  * Created by Ziku on 2016-11-19.

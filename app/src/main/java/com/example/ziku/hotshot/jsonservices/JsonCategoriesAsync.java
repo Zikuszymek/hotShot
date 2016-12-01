@@ -16,13 +16,12 @@ import java.util.List;
  * Created by Ziku on 2016-11-19.
  */
 
-public class JsonCategoriesAsync extends AsyncTask<Void,Void,Void>{
+public class JsonCategoriesAsync{
 
     private static final String TAG = JsonCategoriesAsync.class.getSimpleName();
     private static final String WEB_URL = "http://hotshot.ziku.ayz.pl/categories/?format=json";
 
-    @Override
-    protected Void doInBackground(Void... voids) {
+    public static void UpdateAllCategories(){
         JsonHttp jsonHttp = new JsonHttp();
         String jsonResponse = jsonHttp.JsonServiceCall(WEB_URL);
         Log.d(TAG,jsonResponse);
@@ -58,6 +57,5 @@ public class JsonCategoriesAsync extends AsyncTask<Void,Void,Void>{
         } else {
             Log.d(TAG,"Could not get json from");
         }
-        return null;
     }
 }

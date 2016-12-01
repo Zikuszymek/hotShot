@@ -23,4 +23,10 @@
     <string name="open_drawer">Open navigation drawer</string>
     <string name="close_drawer">Close navigation drawer</string>
     <string name="okazje">Okazje</string>
+    <string name="warning">Ostrzeżenie</string>
+    <string name="sledz_duze">ŚLEDŹ</string>
+    <string name="powiadom_duze">POWIADOM</string>
+    <string name="line">-</string>
+    <string name="kiedy_pojawi_si_nowa_okazja_na_wybranej_stronie_aplikacja_powiadomi_o_tym_u_ydkownika">Kiedy pojawi się nowa okazja na wybranej stronie, aplikacja powiadomi  użytkownika</string>
+    <string name="led_gor_ce_okazje_pojawiaj_ce_si_na_wskazanej_stronie_i_pokazuj_je_na_listach">Śledź gorące okazje pojawiające się na wskazanej stronie i pokazuj je na listach</string>
 </resources>

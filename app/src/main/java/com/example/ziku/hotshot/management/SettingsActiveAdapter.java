@@ -20,11 +20,9 @@ import java.util.List;
  * Created by Ziku on 2016-08-29.
  */
 public class SettingsActiveAdapter extends ArrayAdapter<ActiveWebSites>{
-//    private ListView hotShotListVIew;
 
     public SettingsActiveAdapter(Context context, List<ActiveWebSites> activeSettings) {
         super(context, 0, activeSettings);
-//        this.hotShotListVIew = hotShotListVIew;
     }
 
 
@@ -71,13 +69,6 @@ public class SettingsActiveAdapter extends ArrayAdapter<ActiveWebSites>{
                     checkBox2.setClickable(false);
                     checkBox2.setEnabled(false);
                 }
-
-                List<ActiveHotShots> activeWebSitesList = ActiveHotShots.ReturnAllActiveHotShotsActive(0);
-                HotShotsActiveAdapter hotShotsAdapter = new HotShotsActiveAdapter(getContext(), activeWebSitesList);
-//                if (hotShotListVIew != null) {
-//                    hotShotListVIew.setAdapter(null);
-//                    hotShotListVIew.setAdapter(hotShotsAdapter);
-//                }
             }
         });
 

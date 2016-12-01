@@ -8,9 +8,11 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:layout_marginLeft="4dp"
-        android:layout_marginRight="4dp"
-        android:layout_marginTop="4dp">
+        android:layout_marginLeft="6dp"
+        android:layout_marginRight="6dp"
+        android:layout_marginTop="6dp"
+        android:layout_marginBottom="6dp">
+
         <TextView
             android:paddingLeft="15sp"
             android:paddingRight="15sp"
@@ -21,8 +23,9 @@
             android:layout_height="wrap_content"
             android:textSize="20sp"
             android:text="HotShot"
-            android:textColor="#FF60"
+            android:textColor="#F000"
             android:layout_weight="1"/>
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -55,7 +58,7 @@
     </LinearLayout>
     <View
         android:layout_width="match_parent"
-        android:layout_height="2dp"
+        android:layout_height="1dp"
         android:background="@drawable/orange_line"
         android:layout_marginRight="4dp"
         android:layout_marginLeft="4dp" />

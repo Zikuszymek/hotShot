@@ -1,6 +1,8 @@
 package com.example.ziku.hotshot.management;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.util.Log;
@@ -17,6 +19,8 @@ import com.example.ziku.hotshot.tables.ActiveHotShots;
 
 import java.io.File;
 import java.util.List;
+
+import static android.content.Context.LAYOUT_INFLATER_SERVICE;
 
 /**
  * Created by Ziku on 2016-08-06.
@@ -59,7 +63,7 @@ public class HotShotsActiveAdapter extends ArrayAdapter<ActiveHotShots> {
 
         final String urlString = activeHotShots.productUrl;
 
-        final String fileName = activeHotShots.webSites.webSiteName + ".png";
+        final String fileName = activeHotShots.webSites.webSiteName + String.valueOf(activeHotShots.getId()) + ".png";
         File file = getContext().getFileStreamPath(fileName);
         if(file.exists()){
             if(file.length() > 0){
@@ -75,6 +79,7 @@ public class HotShotsActiveAdapter extends ArrayAdapter<ActiveHotShots> {
             @Override
             public void onClick(View view) {
                 Intent openUrlIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(urlString));
+                openUrlIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 getContext().startActivity(openUrlIntent);
             }
         });
@@ -85,6 +90,7 @@ public class HotShotsActiveAdapter extends ArrayAdapter<ActiveHotShots> {
             public void onClick(View view) {
                 Intent showImageIntent = new Intent(getContext(), ShowImageActivity.class);
                 showImageIntent.putExtra("ImageLocation",fileName);
+                showImageIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 getContext().startActivity(showImageIntent);
             }
         });

@@ -24,7 +24,7 @@ public class SwipeViewAdapter extends FragmentStatePagerAdapter{
 
     @Override
     public Fragment getItem(int position) {
-        Log.d("SWIPE","swipe activities");
+        Log.d("SWIPE","swipe activities" + position);
         switch (position){
             case 0:
                 hotShotFragment = new HotShotFragment();
@@ -38,8 +38,9 @@ public class SwipeViewAdapter extends FragmentStatePagerAdapter{
             case 3:
                 hotShotsBooksFragment = new HotShotsBooksFragment();
                 return hotShotsBooksFragment;
+            default:
+                return null;
         }
-        return null;
     }
 
     @Override

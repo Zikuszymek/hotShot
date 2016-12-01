@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context=".MainActivity">
+    tools:context=".Info">
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
@@ -14,7 +14,7 @@
         android:theme="@style/AppTheme.AppBarOverlay"
         android:background="#FFFF">
         <android.support.v7.widget.Toolbar
-            android:id="@+id/toolbar_hotshot"
+            android:id="@+id/toolbar_info"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:layout_marginRight="1dp"
@@ -33,7 +33,7 @@
                     android:scaleType="fitCenter"
                     android:src="@drawable/hotshots_name"
                     android:layout_weight="5"
-                   />
+                    />
                 <ImageView
                     android:layout_width="?attr/actionBarSize"
                     android:layout_height="match_parent"
@@ -43,6 +43,6 @@
         </android.support.v7.widget.Toolbar>
     </android.support.design.widget.AppBarLayout>
 
-    <include layout="@layout/activity_main"/>
+    <include layout="@layout/activity_info"/>
 
 </android.support.design.widget.CoordinatorLayout>

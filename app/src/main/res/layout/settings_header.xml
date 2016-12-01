@@ -1,24 +1,91 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="horizontal"
+    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="#FFFF"
     >
-    <TextView
-        style="@style/HeaderTextView"
-        android:layout_weight="1"
-        android:paddingLeft="12sp"
-        android:paddingRight="2sp"
-        android:text="@string/strona_internetowa"/>
-    <TextView
-        style="@style/HeaderTextView"
-        android:layout_weight="2"
-        android:text="@string/follw"
-        android:textAlignment="center"/>
-    <TextView
-        style="@style/HeaderTextView"
-        android:layout_weight="2"
-        android:text="@string/notify"
-        android:textAlignment="center"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_margin="4dp">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="@string/follw"
+                android:textColor="#FF60"
+                android:layout_weight="2.5"
+                android:gravity="center"
+                />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="@string/led_gor_ce_okazje_pojawiaj_ce_si_na_wskazanej_stronie_i_pokazuj_je_na_listach"
+                android:layout_weight="1"/>
+        </LinearLayout>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@drawable/orange_line"
+            android:layout_marginRight="4dp"
+            android:layout_marginLeft="4dp" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_margin="4dp">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="@string/powiadom_duze"
+                android:textColor="#FF60"
+                android:layout_weight="2.5"
+                android:gravity="center"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="@string/kiedy_pojawi_si_nowa_okazja_na_wybranej_stronie_aplikacja_powiadomi_o_tym_u_ydkownika"
+                android:layout_weight="1"/>
+        </LinearLayout>
+    </LinearLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:background="@drawable/orange_line"
+        android:layout_marginRight="4dp"
+        android:layout_marginLeft="4dp" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#FFFF"
+        android:orientation="horizontal">
+        <TextView
+            style="@style/HeaderTextView"
+            android:layout_weight="1"
+            android:paddingLeft="12sp"
+            android:paddingRight="2sp"
+            android:text="@string/strona_internetowa"/>
+        <TextView
+            style="@style/HeaderTextView"
+            android:layout_weight="2"
+            android:text="@string/follw"
+            android:textAlignment="center"/>
+        <TextView
+            style="@style/HeaderTextView"
+            android:layout_weight="2"
+            android:text="@string/notify"
+            android:textAlignment="center"/>
+    </LinearLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:background="@drawable/orange_line"
+        android:layout_marginRight="4dp"
+        android:layout_marginLeft="4dp" />
 </LinearLayout>

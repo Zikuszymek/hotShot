@@ -27,13 +27,6 @@ public class HotShotAlarmReceiver extends BroadcastReceiver{
     AlarmManager alarmManager;
     PendingIntent pendingIntent;
 
-//    @Override
-//    public void onReceive(Context context, Intent intent) {
-//        Log.d("TEST0","receiver");
-//        Intent service = new Intent(context,HotShotService.class);
-//        startWakefulService(context,service);
-//    }
-
     private static PowerManager.WakeLock wakelock = null;
     private static WifiManager.WifiLock wifiLock = null;
 
@@ -47,19 +40,12 @@ public class HotShotAlarmReceiver extends BroadcastReceiver{
 
         if(wifiLock == null){
             WifiManager wifiManager = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
-//            if(!wifiManager.isWifiEnabled()) {
-//                wifiManager.setWifiEnabled(true);
-//            }
             wifiLock = wifiManager.createWifiLock(WifiManager.WIFI_MODE_FULL_HIGH_PERF,"HOTSHOT");
         }
         wifiLock.acquire();
     }
 
     public static synchronized void sleepBitch(){
-//        if(wakelock.isHeld())
-//            Log.d("TEST","wakelock is active");
-//        if(wifiLock.isHeld())
-//            Log.d("TEST","wikilock is active");
 
         if(wakelock!=null) {
             wakelock.release();
@@ -75,20 +61,21 @@ public class HotShotAlarmReceiver extends BroadcastReceiver{
     public void onReceive(Context context, Intent intent) {
         Log.d("TEST0","receiver");
         wakeUpMothaFucka(context);
-        Intent service = new Intent(context,HotShotService.class);
+        Intent service = new Intent(context,HotShotIntentService.class);
         context.startService(service);
     }
 
     public  void SetAlarmManager(Context context){
         Log.d("TEST","setting alarm");
-        long PERIOD = 2 * 60 * 1000;
+        long PERIOD = 4 * 60 * 1000;
         long TIMER = 60 * 60 * 1000;
-//        long PROPER_START_TIME = (System.currentTimeMillis()-(Calendar.getInstance().get(Calendar.MINUTE)*60*1000)) + (PERIOD) + TIMER;
-        long PROPER_START_TIME = System.currentTimeMillis() + PERIOD;
+        long PROPER_START_TIME = (System.currentTimeMillis()-(Calendar.getInstance().get(Calendar.MINUTE)*60*1000)) + (PERIOD) + TIMER;
+//        long PROPER_START_TIME = System.currentTimeMillis() + PERIOD;
         alarmManager = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
         Intent intent = new Intent(context,HotShotAlarmReceiver.class);
         pendingIntent = PendingIntent.getBroadcast(context, REQUEST_CODE,intent,0);
         alarmManager.cancel(pendingIntent);
         alarmManager.setRepeating(AlarmManager.RTC_WAKEUP,PROPER_START_TIME, TIMER,pendingIntent);
+//        alarmManager.setAndAllowWhileIdle();
     }
 }

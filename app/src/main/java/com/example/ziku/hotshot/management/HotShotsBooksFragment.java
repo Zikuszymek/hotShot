@@ -1,8 +1,11 @@
 package com.example.ziku.hotshot.management;
 
+import android.app.Activity;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,6 +13,9 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 
 import com.example.ziku.hotshot.R;
+import com.example.ziku.hotshot.jsonservices.AsyncTaskHotShot;
+import com.example.ziku.hotshot.jsonservices.JsonHotShotsAsync;
+import com.example.ziku.hotshot.services.UniversalRefresh;
 import com.example.ziku.hotshot.tables.ActiveHotShots;
 
 import java.util.List;
@@ -29,12 +35,27 @@ public class HotShotsBooksFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
 
-        Log.d("SWIPE","Fragment HotShot Created");
+        Log.d("SWIPE","Fragment Books Created");
         super.onActivityCreated(savedInstanceState);
-        ListView listView = (ListView) getActivity().findViewById(R.id.books_swipe_list);
-        List<ActiveHotShots> activeWebSitesList =  ActiveHotShots.ReturnAllActiveHotShotsActive(2);
-        HotShotsActiveAdapter hotShotsAdapter = new HotShotsActiveAdapter(getContext(), activeWebSitesList);
-        listView.setAdapter(null);
-        listView.setAdapter(hotShotsAdapter);
+
+        final ListView booksList = (ListView)getActivity().findViewById(R.id.books_swipe_list);
+        UniversalRefresh.UniwersalRefreshById(getActivity(),booksList,2);
+        final Activity thisActivity = getActivity();
+
+        final SwipeRefreshLayout swipeRefreshElectronic = (SwipeRefreshLayout) getActivity().findViewById(R.id.swipe_refresh_books);
+        swipeRefreshElectronic.setColorSchemeColors(UniversalRefresh.orangeColor,UniversalRefresh.lighterOrangeColor);
+        swipeRefreshElectronic.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                AsyncTaskHotShot hotShotsAsync = new AsyncTaskHotShot(new Runnable() {
+                    @Override
+                    public void run() {
+                        UniversalRefresh.RefreshAllIfPossible(thisActivity);
+                        swipeRefreshElectronic.setRefreshing(false);
+                    }
+                },getContext(),true);
+                hotShotsAsync.execute();
+            }
+        });
     }
 }

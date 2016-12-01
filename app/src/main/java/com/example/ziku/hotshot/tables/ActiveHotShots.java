@@ -72,12 +72,11 @@ public class ActiveHotShots extends Model implements Comparable<ActiveHotShots>{
 
     @Override
     public int compareTo(ActiveHotShots activeHotShots) {
-      //  Date date1 = activeHotShots.webSites.lastCheck;
-        //Date date2 = this.webSites.lastCheck;
-      //  if(date1.after(date2)){
-      //      return 1;
-      //  } else return -1;
-        return 1;
+        Date date1 = activeHotShots.lastNewChange;
+        Date date2 = this.lastNewChange;
+        if(date1.after(date2)){
+            return 1;
+        } else return -1;
     }
 
 
@@ -88,7 +87,6 @@ public class ActiveHotShots extends Model implements Comparable<ActiveHotShots>{
 
         List<ActiveHotShots> returnList = new ArrayList<>();
         for (ActiveHotShots active :activeHotShotses) {
-            Log.d("ACTIVE",active.productName + " "  + active.webSites.activeFromServer);
             if(active.webSites.isActive){
                 if(category == 0) {
                       returnList.add(active);

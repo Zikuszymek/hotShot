@@ -14,13 +14,12 @@ import org.json.JSONObject;
  * Created by Ziku on 2016-11-19.
  */
 
-public class JsonWebPagesAsync extends AsyncTask<Void,Void,Void>{
+public class JsonWebPagesAsync{
 
     private static final String TAG = JsonWebPagesAsync.class.getSimpleName();
     private static final String WEB_URL = "http://hotshot.ziku.ayz.pl/webpages/?format=json";
 
-    @Override
-    protected Void doInBackground(Void... voids) {
+    public static void UpdateAllWebPages(){
         JsonHttp jsonHttp = new JsonHttp();
         String jsonResponse = jsonHttp.JsonServiceCall(WEB_URL);
         Log.d(TAG,jsonResponse);
@@ -71,6 +70,5 @@ public class JsonWebPagesAsync extends AsyncTask<Void,Void,Void>{
         } else {
             Log.d(TAG,"Could not get json from");
         }
-        return null;
     }
 }

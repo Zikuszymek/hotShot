@@ -1,7 +1,9 @@
 package com.example.ziku.hotshot;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -22,8 +24,11 @@ import android.widget.ListView;
 import com.example.ziku.hotshot.management.HotShotsActiveAdapter;
 import com.example.ziku.hotshot.management.SwipeViewAdapter;
 import com.example.ziku.hotshot.services.HotShotAlarmReceiver;
+import com.example.ziku.hotshot.services.UniversalRefresh;
 import com.example.ziku.hotshot.tables.ActiveHotShots;
+import com.example.ziku.hotshot.tables.ActiveInfo;
 
+import java.util.Date;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
@@ -36,8 +41,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private int orangeColor;
     private SwipeViewAdapter swipeViewAdapter;
     private ViewPager viewPager;
+    private NavigationView navigationView;
 
-    public static boolean APP_IS_RUNNING = false;
+    public static boolean ACTIVITY_ACTIVE = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,7 +58,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         drawerLayout.addDrawerListener(toogle);
         toogle.syncState();
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
         Log.d("TEST","On Create");
@@ -103,19 +109,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
         });
 
-      /*  swipeRefreshAll = (SwipeRefreshLayout)findViewById(R.id.swipe_refresh_all);
-        swipeRefreshElectronic = (SwipeRefreshLayout)findViewById(R.id.swipe_refresh_electronic);
-        swipeRefreshOther = (SwipeRefreshLayout)findViewById(R.id.swipe_refresh_others);
-        swipeRefreshBook = (SwipeRefreshLayout)findViewById(R.id.swipe_refresh_books);
-
-        swipeRefreshAll.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                RefrehsAllListsData();
-            }
-        });
-        */
-
         allButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -152,48 +145,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
         });
 
-//                JsonCategoriesAsync jsonCategoriesAsync = new JsonCategoriesAsync();
-//                try {
-//                    Void cos = jsonCategoriesAsync.execute().get();
-//                } catch (Exception ex) {
-//
-//                }
-//
-//                JsonWebPagesAsync webPagesAsync = new JsonWebPagesAsync();
-//                try {
-//                   Void cos = webPagesAsync.execute().get();
-//                } catch (Exception ex) {
-//
-//                }
-//
-//                JsonHotShotsAsync hotShotsAsync = new JsonHotShotsAsync();
-//                hotShotsAsync.execute();
-
-
     }
 
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         int id = item.getItemId();
-        switch (id){
-            case R.id.okazje:
-                break;
-            case R.id.strony:
-                Intent openSettingsActivity = new Intent(this,SettingsActivity.class);
-                startActivity(openSettingsActivity);
-                break;
-            case R.id.informacje:
-                break;
-            case R.id.napisz:
-                Intent intent = new Intent(Intent.ACTION_SEND);
-                intent.setType("text/html");
-                intent.putExtra(Intent.EXTRA_EMAIL,"zikuszymek@o2.pl");
-                intent.putExtra(Intent.EXTRA_SUBJECT, "test");
-                intent.putExtra(Intent.EXTRA_TEXT, "ytedg");
-
-                startActivity(Intent.createChooser(intent,""));
-                break;
-        }
+        OnNavigationMenuChange(id,this);
         DrawerLayout drawerLayout = (DrawerLayout)findViewById(R.id.drawer_layout);
         drawerLayout.closeDrawer(GravityCompat.START);
         return true;
@@ -208,14 +165,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     protected void onResume() {
         super.onResume();
         Log.d("TEST","onResume");
+        UniversalRefresh.RefreshCategoriesAndWebPages(this);
+        UniversalRefresh.AddNewGlobalInformationIfDoesNotExist(this);
         SetServiceAlarmManager();
-        SetHotShotsListView();
+        navigationView.getMenu().getItem(0).setChecked(true);
+        MainActivity.ACTIVITY_ACTIVE = true;
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        this.APP_IS_RUNNING = true;
+        MainActivity.ACTIVITY_ACTIVE = false;
     }
 
     @Override
@@ -223,14 +183,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         super.onStop();
     }
 
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        SetHotShotsListView();
+    }
+
     private void SetHotShotsListView() {
-        ListView listView = (ListView) findViewById(R.id.hot_shot_swipe_list);
-        if (listView != null) {
-            List<ActiveHotShots> activeWebSitesList = ActiveHotShots.ReturnAllActiveHotShotsActive(0);
-            HotShotsActiveAdapter hotShotsAdapter = new HotShotsActiveAdapter(this, activeWebSitesList);
-            listView.setAdapter(null);
-            listView.setAdapter(hotShotsAdapter);
-        }
+        UniversalRefresh.RefreshAllIfPossible(this);
     }
 
 
@@ -270,7 +230,53 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         allButton.setImageResource(R.drawable.hotshot_button_white);
     }
 
-    private void RefrehsAllListsData(){
-        int i = 1;
+    public static void OnNavigationMenuChange(int id, Context context){
+        switch (id){
+            case R.id.okazje:
+                if(!MainActivity.ACTIVITY_ACTIVE){
+                    Intent activityIntent = new Intent(context,MainActivity.class);
+                    activityIntent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+                    context.startActivity(activityIntent);
+                }
+                if(SettingsActivity.thisSettingsActivity!=null){
+                    SettingsActivity.thisSettingsActivity.finish();
+                }
+
+                if(Info.thisInfo!=null){
+                    Info.thisInfo.finish();
+                }
+                break;
+            case R.id.strony:
+                if(!SettingsActivity.ACTIVITY_ACTIVE) {
+                    Intent openSettingsActivity = new Intent(context, SettingsActivity.class);
+                    openSettingsActivity.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+                    context.startActivity(openSettingsActivity);
+                }
+                if(Info.thisInfo!=null){
+                    Info.thisInfo.finish();
+                }
+                break;
+            case R.id.informacje:
+                if(!Info.ACTIVITY_ACTIVE){
+                    Intent openInfoActivity = new Intent(context,Info.class);
+                    openInfoActivity.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+                    context.startActivity(openInfoActivity);
+                }
+                if(SettingsActivity.thisSettingsActivity!=null){
+                    SettingsActivity.thisSettingsActivity.finish();
+                }
+                break;
+            case R.id.napisz:
+                Intent intent = new Intent(Intent.ACTION_SEND);
+                intent.setData(Uri.parse("mailto:"));
+                intent.putExtra(Intent.EXTRA_EMAIL, new String[]{"grezelek@gmail.pl"});
+                intent.putExtra(Intent.EXTRA_SUBJECT, "HotShot - uwagi, sądy, buziaki");
+                intent.putExtra(Intent.EXTRA_TEXT, "");
+                intent.setType("message/rfc822");
+
+                context.startActivity(Intent.createChooser(intent,""));
+                break;
+        }
     }
+
 }
