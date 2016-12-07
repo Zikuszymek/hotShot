@@ -18,7 +18,7 @@ import org.json.JSONObject;
 public class JsonWebPagesAsync{
 
     private static final String TAG = JsonWebPagesAsync.class.getSimpleName();
-    private static final String WEB_URL = JsonUpdateDB.webPages;
+    private static final String WEB_URL = KeyItems.webPages;
     private Context context;
 
     public JsonWebPagesAsync(Context context) {

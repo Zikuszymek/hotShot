@@ -20,7 +20,7 @@ import java.util.List;
 public class JsonCategoriesAsync{
 
     private static final String TAG = JsonCategoriesAsync.class.getSimpleName();
-    private static final String WEB_URL = JsonUpdateDB.categories;
+    private static final String WEB_URL = KeyItems.categories;
     private Context context;
 
     public JsonCategoriesAsync(Context context) {

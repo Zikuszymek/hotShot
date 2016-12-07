@@ -4,6 +4,7 @@ import com.activeandroid.Model;
 import com.activeandroid.annotation.Table;
 import com.activeandroid.annotation.Column;
 import com.activeandroid.query.Select;
+import com.example.ziku.hotshot.jsonservices.KeyItems;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -80,7 +81,7 @@ public class ActiveHotShots extends Model implements Comparable<ActiveHotShots>{
     public static List<ActiveHotShots> ReturnAllActiveHotShotsActive(int category){
 
         List<ActiveHotShots> activeHotShotses;
-        activeHotShotses = new Select().from(ActiveHotShots.class).where(ActiveHotShots.PRODUCT_NAME + " != ?", JsonUpdateDB.EMPTY).execute();
+        activeHotShotses = new Select().from(ActiveHotShots.class).where(ActiveHotShots.PRODUCT_NAME + " != ?", KeyItems.EMPTY).execute();
 
         List<ActiveHotShots> returnList = new ArrayList<>();
         for (ActiveHotShots active :activeHotShotses) {

@@ -41,7 +41,7 @@ import java.util.Date;
 public class JsonHotShotsAsync {
 
     private static final String TAG = JsonHotShotsAsync.class.getSimpleName();
-    private static final String WEB_URL = JsonUpdateDB.hotshots;
+    private static final String WEB_URL = KeyItems.hotshots;
     private static long MAX_BITMAT_SIZE = 1_000_000;
     private Context context;
     private boolean forced;
@@ -112,7 +112,7 @@ public class JsonHotShotsAsync {
                                     activeHotShot.productUrl = productUrl;
                                     activeHotShot.webSites = activeWebSite;
 
-                                    if (!activeHotShot.productName.equals(JsonUpdateDB.EMPTY) && !activeHotShot.productName.equals(activeHotShot.lastNotyfication)) {
+                                    if (!activeHotShot.productName.equals(KeyItems.EMPTY) && !activeHotShot.productName.equals(activeHotShot.lastNotyfication)) {
 
                                         DownloadTheIMG(activeWebSite.webSiteName + String.valueOf(activeHotShot.getId()), activeHotShot.imgUrl);
                                         activeHotShot.lastNotyfication = productName;
