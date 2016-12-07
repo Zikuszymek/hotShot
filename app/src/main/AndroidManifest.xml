@@ -49,9 +49,13 @@
             android:theme="@style/AppTheme.NoActionBar"
             android:name=".Info"/>
 
-        <receiver android:name=".services.HotShotAlarmReceiver" />
+        <receiver android:process=".hot_shot_process" android:name=".services.HotShotAlarmReceiver">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED"/>
+            </intent-filter>
+        </receiver>
 
-        <service android:name=".services.HotShotIntentService"/>
+        <service android:process=".hot_shot_process" android:name=".services.HotShotIntentService"/>
     </application>
 
 </manifest>

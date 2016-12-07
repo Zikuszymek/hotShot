@@ -1,5 +1,6 @@
 package com.example.ziku.hotshot.jsonservices;
 
+import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
 
@@ -19,11 +20,16 @@ import java.util.List;
 public class JsonCategoriesAsync{
 
     private static final String TAG = JsonCategoriesAsync.class.getSimpleName();
-    private static final String WEB_URL = "http://hotshot.ziku.ayz.pl/categories/?format=json";
+    private static final String WEB_URL = JsonUpdateDB.categories;
+    private Context context;
 
-    public static void UpdateAllCategories(){
+    public JsonCategoriesAsync(Context context) {
+        this.context = context;
+    }
+
+    public void UpdateAllCategories(){
         JsonHttp jsonHttp = new JsonHttp();
-        String jsonResponse = jsonHttp.JsonServiceCall(WEB_URL);
+        String jsonResponse = jsonHttp.JsonServiceCall(WEB_URL,context);
         Log.d(TAG,jsonResponse);
         if(jsonResponse != null){
             try{

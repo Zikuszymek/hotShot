@@ -167,6 +167,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         Log.d("TEST","onResume");
         UniversalRefresh.RefreshCategoriesAndWebPages(this);
         UniversalRefresh.AddNewGlobalInformationIfDoesNotExist(this);
+        UniversalRefresh.RemoveAllNotifications(this);
+        UniversalRefresh.RefreshAllIfNoLongedRefreshed(this);
         SetServiceAlarmManager();
         navigationView.getMenu().getItem(0).setChecked(true);
         MainActivity.ACTIVITY_ACTIVE = true;

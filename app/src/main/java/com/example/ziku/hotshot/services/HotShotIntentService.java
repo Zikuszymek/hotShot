@@ -23,5 +23,6 @@ public class HotShotIntentService extends IntentService{
         Log.d("TEST0","intent");
         JsonHotShotsAsync jsonHotShotsAsync = new JsonHotShotsAsync(getApplicationContext(),false);
         jsonHotShotsAsync.ExecuteJsonRefreshing();
+        HotShotAlarmReceiver.sleepBitch();
     }
 }

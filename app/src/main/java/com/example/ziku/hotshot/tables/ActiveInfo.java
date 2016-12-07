@@ -5,11 +5,9 @@ import com.activeandroid.annotation.Column;
 import com.activeandroid.annotation.Table;
 import com.activeandroid.query.Select;
 import com.example.ziku.hotshot.BuildConfig;
-import com.example.ziku.hotshot.jsonservices.JsonUpdateDB;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;

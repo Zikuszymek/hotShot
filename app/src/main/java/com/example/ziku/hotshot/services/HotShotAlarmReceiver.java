@@ -8,6 +8,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.net.wifi.WifiManager;
+import android.os.Build;
 import android.os.PowerManager;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.WakefulBroadcastReceiver;
@@ -63,6 +64,7 @@ public class HotShotAlarmReceiver extends BroadcastReceiver{
         wakeUpMothaFucka(context);
         Intent service = new Intent(context,HotShotIntentService.class);
         context.startService(service);
+        SetAlarmManager(context);
     }
 
     public  void SetAlarmManager(Context context){
@@ -71,11 +73,21 @@ public class HotShotAlarmReceiver extends BroadcastReceiver{
         long TIMER = 60 * 60 * 1000;
         long PROPER_START_TIME = (System.currentTimeMillis()-(Calendar.getInstance().get(Calendar.MINUTE)*60*1000)) + (PERIOD) + TIMER;
 //        long PROPER_START_TIME = System.currentTimeMillis() + PERIOD;
+        SetProperAlarmManager(context, PROPER_START_TIME);
+    }
+
+    public void SetProperAlarmManager(Context context, long PROPER_START_TIME){
         alarmManager = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
         Intent intent = new Intent(context,HotShotAlarmReceiver.class);
         pendingIntent = PendingIntent.getBroadcast(context, REQUEST_CODE,intent,0);
         alarmManager.cancel(pendingIntent);
-        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP,PROPER_START_TIME, TIMER,pendingIntent);
-//        alarmManager.setAndAllowWhileIdle();
+
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
+            alarmManager.setAndAllowWhileIdle(AlarmManager.RTC_WAKEUP,PROPER_START_TIME,pendingIntent);
+        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT){
+            alarmManager.setExact(AlarmManager.RTC_WAKEUP,PROPER_START_TIME,pendingIntent);
+        } else {
+            alarmManager.set(AlarmManager.RTC_WAKEUP,PROPER_START_TIME,pendingIntent);
+        }
     }
 }

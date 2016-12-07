@@ -1,12 +1,9 @@
 package com.example.ziku.hotshot.tables;
 
-import android.util.Log;
-
 import com.activeandroid.Model;
 import com.activeandroid.annotation.Table;
 import com.activeandroid.annotation.Column;
 import com.activeandroid.query.Select;
-import com.example.ziku.hotshot.jsonservices.JsonUpdateDB;
 
 import java.util.ArrayList;
 import java.util.Collections;

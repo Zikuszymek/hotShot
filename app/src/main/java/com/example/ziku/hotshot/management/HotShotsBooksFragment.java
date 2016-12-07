@@ -50,6 +50,7 @@ public class HotShotsBooksFragment extends Fragment {
                 AsyncTaskHotShot hotShotsAsync = new AsyncTaskHotShot(new Runnable() {
                     @Override
                     public void run() {
+                        UniversalRefresh.RefreshCategoriesAndWebPages(getContext());
                         UniversalRefresh.RefreshAllIfPossible(thisActivity);
                         swipeRefreshElectronic.setRefreshing(false);
                     }

@@ -5,11 +5,13 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
+import android.preference.PreferenceManager;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
 import android.util.Log;
@@ -39,7 +41,7 @@ import java.util.Date;
 public class JsonHotShotsAsync {
 
     private static final String TAG = JsonHotShotsAsync.class.getSimpleName();
-    private static final String WEB_URL = "http://hotshot.ziku.ayz.pl/hotshots/?format=json";
+    private static final String WEB_URL = JsonUpdateDB.hotshots;
     private static long MAX_BITMAT_SIZE = 1_000_000;
     private Context context;
     private boolean forced;
@@ -59,7 +61,7 @@ public class JsonHotShotsAsync {
             if (networkInfo.isConnectedOrConnecting()) {
                 Log.d("TEST", "Connected or connecting");
                 JsonHttp jsonHttp = new JsonHttp();
-                String jsonResponse = jsonHttp.JsonServiceCall(WEB_URL);
+                String jsonResponse = jsonHttp.JsonServiceCall(WEB_URL,context);
                 Log.d(TAG, jsonResponse);
                 if (jsonResponse != null) {
                     try {
@@ -116,7 +118,9 @@ public class JsonHotShotsAsync {
                                         activeHotShot.lastNotyfication = productName;
                                         activeHotShot.lastNewChange = now;
 
-                                        notificationToSend = CreateNotification(activeWebSite.webSiteName,activeHotShot.productName,context);
+                                        if (activeHotShot.webSites.notifyUser) {
+                                            notificationToSend = CreateNotification(activeWebSite.webSiteName, activeHotShot.productName, context);
+                                        }
                                     }
                                     activeHotShot.save();
 
@@ -130,20 +134,21 @@ public class JsonHotShotsAsync {
                             nm.notify(1,notificationToSend);
                         }
 
+                        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+                        SharedPreferences.Editor editor = sharedPreferences.edit();
+                        long currentTime = System.currentTimeMillis();
+                        editor.putLong(UniversalRefresh.LAST_HOTSHOT_UPDATE, currentTime).apply();
+
                     } catch (JSONException ex) {
-                        UniversalRefresh.AlerDialogWithMessage(UniversalRefresh.INTERNET_ERROR,context);
                         Log.d(TAG, "JsonException " + ex.toString());
                     }
                 } else {
-                    UniversalRefresh.AlerDialogWithMessage(UniversalRefresh.INTERNET_ERROR,context);
                     Log.d(TAG, "Could not get json from");
                 }
             } else {
-                UniversalRefresh.AlerDialogWithMessage(UniversalRefresh.INTERNET_ERROR,context);
                 Log.d("TEST","No internet connection");
             }
         } else {
-            UniversalRefresh.AlerDialogWithMessage(UniversalRefresh.INTERNET_ERROR,context);
             Log.d("TEST","Network info is null");
         }
     }

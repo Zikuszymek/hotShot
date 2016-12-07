@@ -1,6 +1,9 @@
 package com.example.ziku.hotshot.jsonservices;
 
+import android.content.Context;
 import android.util.Log;
+
+import com.example.ziku.hotshot.services.UniversalRefresh;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
@@ -19,15 +22,19 @@ import java.net.URL;
 public class JsonHttp {
 
     private static final String TAG = JsonHttp.class.getSimpleName();
+    private static final int TIMEOUT = 6* 1000;
+    private static final int SOCKET_TIMEOUT = 10 * 1000;
 
     public JsonHttp(){}
 
-    public String JsonServiceCall(String urlstring){
+    public String JsonServiceCall(String urlstring, Context context){
         String response = null;
         try{
             URL url = new URL(urlstring);
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
             connection.setRequestMethod("GET");
+            connection.setConnectTimeout(TIMEOUT);
+            connection.setReadTimeout(SOCKET_TIMEOUT);
             InputStream inputStream = new BufferedInputStream(connection.getInputStream());
             response = convertContentToString(inputStream);
         } catch (MalformedURLException ex){

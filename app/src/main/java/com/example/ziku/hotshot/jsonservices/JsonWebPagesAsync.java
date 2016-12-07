@@ -1,5 +1,6 @@
 package com.example.ziku.hotshot.jsonservices;
 
+import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
 
@@ -17,11 +18,16 @@ import org.json.JSONObject;
 public class JsonWebPagesAsync{
 
     private static final String TAG = JsonWebPagesAsync.class.getSimpleName();
-    private static final String WEB_URL = "http://hotshot.ziku.ayz.pl/webpages/?format=json";
+    private static final String WEB_URL = JsonUpdateDB.webPages;
+    private Context context;
 
-    public static void UpdateAllWebPages(){
+    public JsonWebPagesAsync(Context context) {
+        this.context = context;
+    }
+
+    public void UpdateAllWebPages(){
         JsonHttp jsonHttp = new JsonHttp();
-        String jsonResponse = jsonHttp.JsonServiceCall(WEB_URL);
+        String jsonResponse = jsonHttp.JsonServiceCall(WEB_URL,context);
         Log.d(TAG,jsonResponse);
         if(jsonResponse != null){
             try{
