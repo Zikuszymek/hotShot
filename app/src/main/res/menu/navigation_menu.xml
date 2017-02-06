@@ -18,5 +18,9 @@
             android:id="@+id/napisz"
             android:icon="@drawable/mail_icon_orange"
             android:title="@string/napisz_do_nas"/>
+        <item
+            android:id="@+id/ocen"
+            android:icon="@drawable/ocen_orange"
+            android:title="@string/ocen"/>
     </group>
 </menu>

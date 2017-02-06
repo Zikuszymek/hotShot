@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceCategory android:title="@string/synchronizuj_w_tle"
+        android:layout="@layout/preference_category_l">
+
+        <SwitchPreference android:title="@string/synchronizuj"
+            android:key="@string/key_sync_background" android:defaultValue="true"
+            android:summary="@string/wlaczone"
+            />
+        <SwitchPreference android:title="@string/tylko_z_wifi"
+            android:key="@string/key_sync_wifi" android:defaultValue="false"
+            />
+    </PreferenceCategory>
+    <PreferenceCategory android:title="@string/nowe_oferty"
+        android:layout="@layout/preference_category_l">
+        <SwitchPreference android:title="@string/powiadomienia"
+            android:key="@string/key_notyfication" android:defaultValue="true"
+            android:summary="@string/wlaczone"
+            />
+        <SwitchPreference android:title="@string/wibracje"
+            android:key="@string/key_vibration" android:defaultValue="true"
+            android:summary="@string/wlaczone"
+            />
+        <SwitchPreference android:title="@string/aktualizacje_opcje"
+            android:key="@string/key_check_for_updates" android:defaultValue="true"
+            android:summary="@string/wlaczone"
+            />
+        <Preference android:title="@string/strony_powiadomienia">
+            <intent android:action="android.intent.action.VIEW"
+                android:targetPackage="com.hotshotapp.ziku.hotshot"
+                android:targetClass="com.hotshotapp.ziku.hotshot.SettingsActivity"/>
+        </Preference>
+    </PreferenceCategory>
+</PreferenceScreen>

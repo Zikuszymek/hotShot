@@ -1,16 +1,25 @@
 apply plugin: 'com.android.application'
 apply plugin: 'idea'
+apply plugin: 'com.jakewharton.butterknife'
 
 android {
+    signingConfigs {
+        config {
+            keyAlias 'HotShotBeta'
+            keyPassword 'klupfiks17x'
+            storeFile file('D:/PROJEKTY/HotShot/HotShot/hotShotKey.jks')
+            storePassword '0rk)ZMaj0rk)'
+        }
+    }
     compileSdkVersion 24
     buildToolsVersion "24.0.0"
-
     defaultConfig {
-        applicationId "com.example.ziku.hotshot"
+        applicationId "com.hotshotapp.ziku.hotshot"
         minSdkVersion 16
         targetSdkVersion 24
-        versionCode 1
-        versionName "0.5.8"
+        versionCode 6
+        versionName "0.9"
+        multiDexEnabled = true
     }
     buildTypes {
         release {
@@ -18,18 +27,18 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
-
     repositories {
         jcenter()
         maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
     }
+
 }
 
 dependencies {
     testCompile 'junit:junit:4.12'
+
     compile 'com.android.support:appcompat-v7:24.0.0'
     compile 'com.android.support:design:24.0.0'
     compile 'com.michaelpardo:activeandroid:3.1.0-SNAPSHOT'
     compile fileTree(include: ['*.jar'], dir: 'libs')
-    compile files('libs/jsoup-1.9.2.jar')
 }

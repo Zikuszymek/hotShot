@@ -2,21 +2,15 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/activity_settings"
+    android:id="@+id/activity_settings_global"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.hotshotapp.ziku.hotshot.SettingsActivity"
+    tools:context="com.hotshotapp.ziku.hotshot.PreferencesSettingsActivity"
     app:layout_behavior="android.support.design.widget.AppBarLayout$ScrollingViewBehavior"
-    tools:showIn="@layout/settings_drawer_layout">
-    <ListView
-        android:id="@+id/settings_swipe_list"
-        android:layout_marginBottom="2dp"
-        android:layout_marginLeft="2dp"
-        android:layout_marginRight="2dp"
+    tools:showIn="@layout/settings_drawer_layout_global">
+    <fragment android:name="com.hotshotapp.ziku.hotshot.SettingsFragment"
+        android:id="@+id/settings_fragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#FFFF"
-        android:dividerHeight="0dp"
-        android:divider="@null">
-    </ListView>
+        />
 </RelativeLayout>

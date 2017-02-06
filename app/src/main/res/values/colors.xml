@@ -3,4 +3,8 @@
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
+    <color name="hotShotColor">#FF60</color>
+    <color name="greyColor">#F444</color>
+    <color name="blackCOlor">#F000</color>
+    <color name="transparentOrange">#4F60</color>
 </resources>

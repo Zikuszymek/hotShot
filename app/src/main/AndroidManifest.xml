@@ -1,13 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.ziku.hotshot">
+    package="com.hotshotapp.ziku.hotshot">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS"/>
 
     <application
         android:name="com.activeandroid.app.Application"
@@ -24,7 +27,7 @@
             android:value="1" />
         <meta-data
             android:name="AA_MODELS"
-            android:value="com.example.ziku.hotshot.tables.ActiveInfo, com.example.ziku.hotshot.tables.ActiveWebSites, com.example.ziku.hotshot.tables.ActiveHotShots, com.example.ziku.hotshot.tables.ActiveCategories" />
+            android:value="com.hotshotapp.ziku.hotshot.tables.ActiveInfo, com.hotshotapp.ziku.hotshot.tables.ActiveWebSites, com.hotshotapp.ziku.hotshot.tables.ActiveHotShots, com.hotshotapp.ziku.hotshot.tables.ActiveCategories" />
 
         <activity
             android:name=".MainActivity"
@@ -44,18 +47,32 @@
         <activity
             android:name=".management.ShowImageActivity"
             android:theme="@style/PopupActivity" />
-
         <activity
-            android:theme="@style/AppTheme.NoActionBar"
-            android:name=".Info"/>
+            android:name=".Info"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".PreferencesSettingsActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
 
-        <receiver android:process=".hot_shot_process" android:name=".services.HotShotAlarmReceiver">
+        <receiver android:name=".services.HotShotAlarmReceiver">
             <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED"/>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+
+                <category android:name="android.intent.category.HOME" />
             </intent-filter>
         </receiver>
 
-        <service android:process=".hot_shot_process" android:name=".services.HotShotIntentService"/>
+        <service android:name=".services.HotShotIntentService" />
+
+        <activity
+            android:name=".SplashActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+
+        </activity>
+
+        <activity android:name=".UpdateToNewVersionActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+        </activity>
     </application>
 
 </manifest>

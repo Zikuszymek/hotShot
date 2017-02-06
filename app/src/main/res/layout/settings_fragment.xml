@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.example.ziku.hotshot.MainActivity"
+    tools:context="com.hotshotapp.ziku.hotshot.MainActivity"
     android:background="#FFFF">
     <ListView
         android:id="@+id/hot_shot_list"

@@ -17,7 +17,7 @@
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
     <string name="action_settings">Settings</string>
-    <string name="strony">Strony i powiadomienia</string>
+    <string name="strony">Ustawienia</string>
     <string name="o_aplikacji">O aplikacji</string>
     <string name="napisz_do_nas">Napisz do nas</string>
     <string name="open_drawer">Open navigation drawer</string>
@@ -29,4 +29,25 @@
     <string name="line">-</string>
     <string name="kiedy_pojawi_si_nowa_okazja_na_wybranej_stronie_aplikacja_powiadomi_o_tym_u_ydkownika">Kiedy pojawi się nowa okazja na wybranej stronie, aplikacja powiadomi  użytkownika</string>
     <string name="led_gor_ce_okazje_pojawiaj_ce_si_na_wskazanej_stronie_i_pokazuj_je_na_listach">Śledź gorące okazje pojawiające się na wskazanej stronie i pokazuj je na listach</string>
+    <string name="ocen">Oceń</string>
+    <string name="ubrania">ubrania</string>
+
+    <!--Ustawienia-->
+    <string name="synchronizuj_w_tle">Synchronizacja ofert w tle</string>
+    <string name="synchronizuj">Synchronizuj</string>
+    <string name="tylko_z_wifi">Tylko z Wi-fi</string>
+    <string name="nowe_oferty">Oferty i Powiadomienia</string>
+    <string name="powiadomienia">Powiadomienia</string>
+    <string name="aktualizacje_opcje">Sprawdzaj aktualizacje</string>
+    <string name="strony_powiadomienia">Strony i powiadomienia</string>
+    <string name="wibracje">Wibracje</string>
+    <string name="wlaczone">Aktywne</string>
+    <string name="wylaczone">Niekatywne</string>
+
+    <string name="key_check_for_updates">key_check_for_updates</string>
+    <string name="key_sync_background">key_sync_bacground</string>
+    <string name="key_sync_wifi">key_sync_wifi</string>
+    <string name="key_notyfication">key_notyfication</string>
+    <string name="key_vibration">key_vibration</string>
+    <string name="aktualizacja">Nowa wersja aplikacji HotShot jest gotowa do pobrania. Aby śledzić aktualne gorące oferty, zalecamy aktualizację aplikacji do najnowszej dostępnej wersji.</string>
 </resources>
