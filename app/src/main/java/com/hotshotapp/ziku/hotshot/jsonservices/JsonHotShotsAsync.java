@@ -42,7 +42,7 @@ import java.util.Date;
 public class JsonHotShotsAsync {
 
     private static final String TAG = JsonHotShotsAsync.class.getSimpleName();
-    private static final String WEB_URL = KeyItems.hotshots;
+    private static final String WEB_URL = KeyItems.HOTSHOTS;
     private static long MAX_BITMAT_SIZE = 1_000_000;
     private Context context;
     private boolean forced;

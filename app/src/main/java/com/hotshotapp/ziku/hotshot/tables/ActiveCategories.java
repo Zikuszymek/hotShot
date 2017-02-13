@@ -7,6 +7,7 @@ import com.activeandroid.Model;
 import com.activeandroid.annotation.Column;
 import com.activeandroid.annotation.Table;
 import com.activeandroid.query.Select;
+import com.google.gson.annotations.SerializedName;
 
 /**
  * Created by Ziku on 2016-11-19.
@@ -33,4 +34,5 @@ public class ActiveCategories extends Model{
         Cursor cursor = Cache.openDatabase().rawQuery(resultRecords,null);
         return cursor;
     }
+
 }

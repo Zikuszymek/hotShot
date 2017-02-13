@@ -16,7 +16,7 @@ import org.json.JSONObject;
 public class JsonCategoriesAsync{
 
     private static final String TAG = JsonCategoriesAsync.class.getSimpleName();
-    private static final String WEB_URL = KeyItems.categories;
+    private static final String WEB_URL = KeyItems.CATEGORIES;
     private Context context;
 
     public JsonCategoriesAsync(Context context) {

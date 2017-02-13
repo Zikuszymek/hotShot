@@ -7,6 +7,7 @@ import com.activeandroid.annotation.Column;
 import com.activeandroid.annotation.Table;
 import com.activeandroid.Model;
 import com.activeandroid.query.Select;
+import com.google.gson.annotations.SerializedName;
 
 /**
  * Created by Ziku on 2016-09-11.
@@ -15,12 +16,12 @@ import com.activeandroid.query.Select;
 public class ActiveWebSites extends Model{
 
     public static final String WEB_SITE_TABLE = "web_sites_table";
-    public static final String WEB_SITE_NAME = "web_site_name";
-    public static final String WEB_SITE_URL = "web_site_url";
+    public static final String WEB_SITE_NAME = "name_web_page";
+    public static final String WEB_SITE_URL = "url_web_page";
     public static final String IS_ACTIVE = "is_active";
     public static final String NOTIFY_USER = "notify_user";
-    public static final String ACTIVE_FROM_SERVER = "active_from_server";
-    public static final String WEB_CATEGORY = "web_category";
+    public static final String ACTIVE_FROM_SERVER = "is_active_page";
+    public static final String WEB_CATEGORY = "web_page_category";
 
     @Column(name = WEB_SITE_NAME)
     public String webSiteName;
@@ -59,4 +60,6 @@ public class ActiveWebSites extends Model{
         Cursor cursor = Cache.openDatabase().rawQuery(resultRecords,null);
         return cursor;
     }
+
+
 }
