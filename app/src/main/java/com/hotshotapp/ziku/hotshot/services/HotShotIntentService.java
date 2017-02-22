@@ -4,11 +4,11 @@ import android.app.IntentService;
 import android.content.Context;
 import android.content.Intent;
 import android.net.wifi.WifiManager;
-import android.util.Log;
 
 import com.hotshotapp.ziku.hotshot.R;
-import com.hotshotapp.ziku.hotshot.jsonservices.JsonHotShotsAsync;
 import com.hotshotapp.ziku.hotshot.management.SharedSettingsHS;
+import com.hotshotapp.ziku.hotshot.jsonservices.RESTRequestAndCallback;
+import com.hotshotapp.ziku.hotshot.jsonservices.RetrofitRequestHotshot;
 
 /**
  * Created by Ziku on 2016-11-30.
@@ -35,8 +35,8 @@ public class HotShotIntentService extends IntentService{
             }
         }
         if(canSynchronized) {
-            JsonHotShotsAsync jsonHotShotsAsync = new JsonHotShotsAsync(getApplicationContext(), false);
-            jsonHotShotsAsync.ExecuteJsonRefreshing();
+            RESTRequestAndCallback restRequestAndCallback = new RESTRequestAndCallback(RetrofitRequestHotshot.getRetrofitAPI(), getApplicationContext());
+            restRequestAndCallback.getAllHotShots(false);
         }
         HotShotAlarmReceiver.sleepBitch();
     }

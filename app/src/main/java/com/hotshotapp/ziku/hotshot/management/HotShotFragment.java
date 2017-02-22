@@ -20,28 +20,33 @@ import com.hotshotapp.ziku.hotshot.services.UniversalRefresh;
 /**
  * Created by Ziku on 2016-08-31.
  */
-public class HotShotFragment extends Fragment{
+public class HotShotFragment extends Fragment {
+
+    public final static String CATEGORY_TYPE = "category_type";
+
+    private ListView listView;
+    private SwipeRefreshLayout swipeRefreshLayout;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-       return inflater.inflate(R.layout.hots_shots_list,container,false);
+        View view = inflater.inflate(R.layout.hots_shots_list, container, false);
+        listView = (ListView) view.findViewById(R.id.hot_shot_swipe_list);
+        swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_refresh_all);
+        return view;
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         Bundle bundle = getArguments();
-
-        Log.d("SWIPE","Fragment HotShot Created");
         super.onActivityCreated(savedInstanceState);
 
-        final ListView allList = (ListView)getActivity().findViewById(R.id.hot_shot_swipe_list);
-        UniversalRefresh.UniwersalRefreshById(getActivity(),allList,0);
+        UniversalRefresh.UniwersalRefreshById(getActivity(), listView, bundle.getInt(CATEGORY_TYPE));
         final Activity thisActivity = getActivity();
 
-        final SwipeRefreshLayout swipeRefreshElectronic = (SwipeRefreshLayout) getActivity().findViewById(R.id.swipe_refresh_all);
-        swipeRefreshElectronic.setColorSchemeColors(UniversalRefresh.orangeColor,UniversalRefresh.lighterOrangeColor);
-        swipeRefreshElectronic.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+//        final SwipeRefreshLayout swipeRefreshElectronic = (SwipeRefreshLayout) getActivity().findViewById(R.id.swipe_refresh_all);
+        swipeRefreshLayout.setColorSchemeColors(UniversalRefresh.orangeColor,UniversalRefresh.lighterOrangeColor);
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
                 AsyncTaskHotShot hotShotsAsync = new AsyncTaskHotShot(new Runnable() {
@@ -49,7 +54,7 @@ public class HotShotFragment extends Fragment{
                     public void run() {
                         UniversalRefresh.RefreshCategoriesAndWebPages(getContext());
                         UniversalRefresh.RefreshAllIfPossible(thisActivity);
-                        swipeRefreshElectronic.setRefreshing(false);
+                        swipeRefreshLayout.setRefreshing(false);
                     }
                 },getContext(),true);
                 hotShotsAsync.execute();

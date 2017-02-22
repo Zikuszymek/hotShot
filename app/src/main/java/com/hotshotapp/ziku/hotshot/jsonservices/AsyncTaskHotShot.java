@@ -26,8 +26,8 @@ public class AsyncTaskHotShot extends AsyncTask<Void,Void,Void> {
     @Override
     protected Void doInBackground(Void... voids) {
         try {
-            JsonHotShotsAsync jsonHotShotsAsync = new JsonHotShotsAsync(context, forced);
-            jsonHotShotsAsync.ExecuteJsonRefreshing();
+            RESTRequestAndCallback restRequestAndCallback = new RESTRequestAndCallback(RetrofitRequestHotshot.getRetrofitAPI(), context);
+            restRequestAndCallback.getAllHotShots(forced);
         } catch (Exception ex){
             errorOccured = true;
         }

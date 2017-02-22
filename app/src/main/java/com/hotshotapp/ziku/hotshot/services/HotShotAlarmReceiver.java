@@ -18,8 +18,6 @@ import java.util.Calendar;
 public class HotShotAlarmReceiver extends BroadcastReceiver{
 
     private static int REQUEST_CODE = 12345;
-    AlarmManager alarmManager;
-    PendingIntent pendingIntent;
 
     private static PowerManager.WakeLock wakelock = null;
     private static WifiManager.WifiLock wifiLock = null;

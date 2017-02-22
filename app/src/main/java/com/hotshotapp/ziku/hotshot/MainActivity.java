@@ -1,22 +1,15 @@
 package com.hotshotapp.ziku.hotshot;
 
-import android.Manifest;
-import android.app.Activity;
-import android.app.ActivityManager;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.PowerManager;
-import android.preference.PreferenceFragment;
 import android.provider.Settings;
 import android.support.design.widget.NavigationView;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
@@ -29,9 +22,10 @@ import android.view.View;
 import android.widget.ImageButton;
 
 
-import com.hotshotapp.ziku.hotshot.management.SettingsActiveAdapter;
 import com.hotshotapp.ziku.hotshot.management.SharedSettingsHS;
 import com.hotshotapp.ziku.hotshot.management.SwipeViewAdapter;
+import com.hotshotapp.ziku.hotshot.jsonservices.RESTRequestAndCallback;
+import com.hotshotapp.ziku.hotshot.jsonservices.RetrofitRequestHotshot;
 import com.hotshotapp.ziku.hotshot.services.HotShotAlarmReceiver;
 import com.hotshotapp.ziku.hotshot.services.UniversalRefresh;
 
@@ -186,16 +180,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     protected void onResume() {
         super.onResume();
-        Log.d("TESTS","onResume");
         UniversalRefresh.RefreshCategoriesAndWebPages(this);
         UniversalRefresh.AddNewGlobalInformationIfDoesNotExist(this);
         UniversalRefresh.RemoveAllNotifications(this);
         UniversalRefresh.RefreshAllIfNoLongedRefreshed(this);
-        Log.d("TEST","shared preference: " + SharedSettingsHS.GetPreferenceBoolen(getString(R.string.key_check_for_updates),getApplicationContext()));
         if(SharedSettingsHS.GetPreferenceBoolen(getString(R.string.key_check_for_updates),getApplicationContext())) {
             UniversalRefresh.CheckForNewAPKVersion(this);
         }
-       // requestIgnoreBatteryOptymalization(getApplicationContext());
         SetServiceAlarmManager();
         navigationView.getMenu().getItem(0).setChecked(true);
         MainActivity.ACTIVITY_ACTIVE = true;
