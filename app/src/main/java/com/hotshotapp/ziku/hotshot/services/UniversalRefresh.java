@@ -120,7 +120,7 @@ public class UniversalRefresh {
     public static void UniwersalRefreshById(Activity activity, ListView listView, int selectedList) {
         if (listView != null) {
             List<ActiveHotShots> activeWebSitesList = ActiveHotShots.ReturnAllActiveHotShotsActive(selectedList);
-            HotShotsActiveAdapter hotShotsAdapter = new HotShotsActiveAdapter(activity.getBaseContext(), activeWebSitesList);
+            HotShotsActiveAdapter hotShotsAdapter = new HotShotsActiveAdapter(activity.getBaseContext(), activity, activeWebSitesList);
             listView.setAdapter(null);
             listView.setAdapter(hotShotsAdapter);
             Log.d("LIST", "list is not null");

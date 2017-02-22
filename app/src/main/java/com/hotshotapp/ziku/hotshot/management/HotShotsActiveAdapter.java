@@ -1,8 +1,11 @@
 package com.hotshotapp.ziku.hotshot.management;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.support.v4.app.ActivityOptionsCompat;
+import android.support.v4.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,7 +14,9 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.hotshotapp.ziku.hotshot.MainActivity;
 import com.hotshotapp.ziku.hotshot.R;
+import com.hotshotapp.ziku.hotshot.ShowImageActivity;
 import com.hotshotapp.ziku.hotshot.tables.ActiveHotShots;
 
 import java.io.File;
@@ -24,9 +29,11 @@ public class HotShotsActiveAdapter extends ArrayAdapter<ActiveHotShots> {
 
     private static final String OTHERTEES = "othertees";
     private static final String PATTERN = "wzór koszulki:";
+    private final Activity activity;
 
-    public HotShotsActiveAdapter(Context context, List<ActiveHotShots> activeHotShotsList) {
+    public HotShotsActiveAdapter(Context context, Activity activity, List<ActiveHotShots> activeHotShotsList) {
         super(context, 0,activeHotShotsList);
+        this.activity = activity;
     }
 
 
@@ -83,8 +90,6 @@ public class HotShotsActiveAdapter extends ArrayAdapter<ActiveHotShots> {
                 imageView.setImageResource(R.drawable.hot_shot_icon);
             }
         }
-
-
         content.setFocusable(true);
         content.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -96,6 +101,8 @@ public class HotShotsActiveAdapter extends ArrayAdapter<ActiveHotShots> {
             }
         });
 
+        final View thisImageView = imageView;
+
         imageView.setFocusable(true);
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -103,7 +110,8 @@ public class HotShotsActiveAdapter extends ArrayAdapter<ActiveHotShots> {
                 Intent showImageIntent = new Intent(getContext(), ShowImageActivity.class);
                 showImageIntent.putExtra("ImageLocation",fileName);
                 showImageIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                getContext().startActivity(showImageIntent);
+//                ActivityOptionsCompat optionsCompat = ActivityOptionsCompat.makeSceneTransitionAnimation(activity,new Pair<View,String>(thisImageView, "hotshotImage"));
+                getContext().startActivity(showImageIntent);//,//optionsCompat.toBundle());
             }
         });
 

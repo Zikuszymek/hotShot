@@ -1,9 +1,12 @@
 package com.hotshotapp.ziku.hotshot;
 
+import android.Manifest;
+import android.app.Activity;
 import android.app.ActivityManager;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
@@ -12,6 +15,8 @@ import android.os.PowerManager;
 import android.preference.PreferenceFragment;
 import android.provider.Settings;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
@@ -42,12 +47,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private SwipeViewAdapter swipeViewAdapter;
     private ViewPager viewPager;
     private NavigationView navigationView;
+    private Context context;
 
     public static boolean ACTIVITY_ACTIVE = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        context = this;
         setContentView(R.layout.main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_hotshot);
         setSupportActionBar(toolbar);
@@ -179,12 +186,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     protected void onResume() {
         super.onResume();
-        Log.d("TEST","onResume");
+        Log.d("TESTS","onResume");
         UniversalRefresh.RefreshCategoriesAndWebPages(this);
         UniversalRefresh.AddNewGlobalInformationIfDoesNotExist(this);
         UniversalRefresh.RemoveAllNotifications(this);
         UniversalRefresh.RefreshAllIfNoLongedRefreshed(this);
-
+        Log.d("TEST","shared preference: " + SharedSettingsHS.GetPreferenceBoolen(getString(R.string.key_check_for_updates),getApplicationContext()));
         if(SharedSettingsHS.GetPreferenceBoolen(getString(R.string.key_check_for_updates),getApplicationContext())) {
             UniversalRefresh.CheckForNewAPKVersion(this);
         }

@@ -9,11 +9,19 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+
 
 public class UpdateToNewVersionActivity extends AppCompatActivity {
 
     Context context;
+
+    @BindView(R.id.update_button)
     Button declineButton;
+
+    @BindView(R.id.not_now_button)
     Button acceptButton;
 
     @Override
@@ -22,30 +30,37 @@ public class UpdateToNewVersionActivity extends AppCompatActivity {
         setContentView(R.layout.activity_update_to_new_version);
         context = this;
 
-        acceptButton = (Button) findViewById(R.id.update_button);
-        declineButton = (Button) findViewById(R.id.not_now_button);
+        ButterKnife.bind(this);
 
-        acceptButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Uri uri = Uri.parse("market://details?id=" + context.getPackageName());
-                Intent goToShopIntent = new Intent(Intent.ACTION_VIEW, uri);
+//        acceptButton = (Button) findViewById(R.id.update_button);
+//        declineButton = (Button) findViewById(R.id.not_now_button);
 
-                try {
-                    context.startActivity(goToShopIntent);
-                } catch (ActivityNotFoundException ex) {
-                    context.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("http://play.google.com/store/apps/details?id=" + context.getPackageName())));
-                }
-                finish();
-            }
-        });
+//        acceptButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Uri uri = Uri.parse("market://details?id=" + context.getPackageName());
+//                Intent goToShopIntent = new Intent(Intent.ACTION_VIEW, uri);
+//
+//                try {
+//                    context.startActivity(goToShopIntent);
+//                } catch (ActivityNotFoundException ex) {
+//                    context.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("http://play.google.com/store/apps/details?id=" + context.getPackageName())));
+//                }
+//                finish();
+//            }
+//        });
+//
+//        declineButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                finish();
+//            }
+//        });
 
-        declineButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                finish();
-            }
-        });
+    }
+
+    @OnClick(R.id.update_button)
+    public void update(){
 
     }
 }

@@ -1,4 +1,4 @@
-package com.hotshotapp.ziku.hotshot.management;
+package com.hotshotapp.ziku.hotshot;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -26,13 +26,13 @@ public class ShowImageActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.show_image);
 
-        DisplayMetrics displayMetrics = new DisplayMetrics();
-        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
-
-        int width = (int)(displayMetrics.widthPixels * .8);
-        int height = (int)(displayMetrics.heightPixels * 0.8);
-
-        getWindow().setLayout(width,height);
+//        DisplayMetrics displayMetrics = new DisplayMetrics();
+//        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+//
+//        int width = (int)(displayMetrics.widthPixels * .8);
+//        int height = (int)(displayMetrics.heightPixels * 0.8);
+//
+//        getWindow().setLayout(width,height);
 
         imageView = (ImageView) findViewById(R.id.show_image_view);
         thisIntent = getIntent();

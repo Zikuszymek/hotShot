@@ -45,7 +45,7 @@
             android:name=".SettingsActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".management.ShowImageActivity"
+            android:name=".ShowImageActivity"
             android:theme="@style/PopupActivity" />
         <activity
             android:name=".Info"

@@ -13,5 +13,9 @@ public class KeyItems {
     public static final String WEBPAGES = "http://hotshot.ziku.ayz.pl/webpages/?format=json";
     public static final String HOTSHOTS = "http://hotshot.ziku.ayz.pl/hotshots/?format=json";
 
+    public static final String CATEGORIES_REST = "categories/?format=json";
+    public static final String WEBPAGES_REST = "webpages/?format=json";
+    public static final String HOTSHOTS_REST = "hotshots/?format=json";
+
 }
 
