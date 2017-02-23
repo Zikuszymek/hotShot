@@ -109,27 +109,6 @@ public class UniversalRefresh {
         }
     }
 
-    public static void RefreshAllIfPossible(Activity activity) {
-        ListView listView = (ListView) activity.findViewById(R.id.hot_shot_swipe_list);
-        ListView electroList = (ListView) activity.findViewById(R.id.electronics_swipe_list);
-        ListView bookList = (ListView) activity.findViewById(R.id.books_swipe_list);
-        ListView otherList = (ListView) activity.findViewById(R.id.others_swipe_list);
-
-        UniversalRefresh.UniwersalRefreshById(activity, listView, 0);
-        UniversalRefresh.UniwersalRefreshById(activity, electroList, 1);
-        UniversalRefresh.UniwersalRefreshById(activity, bookList, 2);
-        UniversalRefresh.UniwersalRefreshById(activity, otherList, 3);
-    }
-
-    public static void UniwersalRefreshById(Activity activity, ListView listView, int selectedList) {
-        if (listView != null) {
-            List<ActiveHotShots> activeWebSitesList = ActiveHotShots.ReturnAllActiveHotShotsActive(selectedList);
-            HotShotsActiveAdapter hotShotsAdapter = new HotShotsActiveAdapter(activity.getBaseContext(), activity, activeWebSitesList);
-            listView.setAdapter(null);
-            listView.setAdapter(hotShotsAdapter);
-        }
-    }
-
     public static void RefreshAllIfNoLongedRefreshed(final Activity activity) {
         SharedPreferences sharedPreferences = activity.getSharedPreferences(UniversalRefresh.SHARED_PREFERENCES, Context.MODE_PRIVATE);
         long lastCheck = sharedPreferences.getLong(LAST_HOTSHOT_UPDATE, 0);
@@ -139,17 +118,12 @@ public class UniversalRefresh {
         NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
 
         if (networkInfo != null) {
-
             if (networkInfo.isConnectedOrConnecting()) {
-
-                Date last = new Date(lastCheck);
-                Date current = new Date(currentTime);
                 if (lastCheck == 0 || ((currentTime - lastCheck) > HOUR)) {
                     AsyncTaskHotShot hotShotsAsync = new AsyncTaskHotShot(new Runnable() {
                         @Override
                         public void run() {
                             UniversalRefresh.RefreshCategoriesAndWebPages(activity.getApplicationContext());
-                            UniversalRefresh.RefreshAllIfPossible(activity);
                         }
                     }, activity.getBaseContext(), true);
                     hotShotsAsync.execute();

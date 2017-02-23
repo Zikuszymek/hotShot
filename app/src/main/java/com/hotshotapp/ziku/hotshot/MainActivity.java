@@ -41,14 +41,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private SwipeViewAdapter swipeViewAdapter;
     private ViewPager viewPager;
     private NavigationView navigationView;
-    private Context context;
 
     public static boolean ACTIVITY_ACTIVE = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        context = this;
         setContentView(R.layout.main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_hotshot);
         setSupportActionBar(toolbar);
@@ -61,8 +59,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-
-        Log.d("TEST","On Create");
 
         allButton = (ImageButton) findViewById(R.id.all_button);
         electronicButton = (ImageButton) findViewById(R.id.electronic_button);
@@ -90,23 +86,18 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 switch (position){
                     case 0:
                         SetAllHSButtonActive();
-                        Log.d("SWIPE","SWIPE 1");
                         break;
                     case 1:
                         SetElectronicHSButtonActive();
-                        Log.d("SWIPE","SWIPE 2");
                         break;
                     case 2:
                         SetOtherHSButtonActive();
-                        Log.d("SWIPE","SWIPE 3");
                         break;
                     case 3:
                         SetBookHSButtonActive();
-                        Log.d("SWIPE","SWIPE 4");
                         break;
                     case 4:
                         SetClothesButtonActive();
-                        Log.d("SWIPE","SWIPE 5");
                         break;
                 }
             }
@@ -216,7 +207,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     private void SetHotShotsListView() {
-        UniversalRefresh.RefreshAllIfPossible(this);
+        if(swipeViewAdapter!=null){
+            swipeViewAdapter.refreshAllCreatedFragments();
+        }
     }
 
 

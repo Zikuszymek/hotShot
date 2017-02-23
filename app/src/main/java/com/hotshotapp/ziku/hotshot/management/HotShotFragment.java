@@ -7,6 +7,8 @@ import android.support.annotation.Nullable;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,6 +18,12 @@ import android.widget.ListView;
 import com.hotshotapp.ziku.hotshot.R;
 import com.hotshotapp.ziku.hotshot.jsonservices.AsyncTaskHotShot;
 import com.hotshotapp.ziku.hotshot.services.UniversalRefresh;
+import com.hotshotapp.ziku.hotshot.tables.ActiveHotShots;
+
+import java.util.List;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 /**
  * Created by Ziku on 2016-08-31.
@@ -24,27 +32,34 @@ public class HotShotFragment extends Fragment {
 
     public final static String CATEGORY_TYPE = "category_type";
 
-    private ListView listView;
-    private SwipeRefreshLayout swipeRefreshLayout;
+    private HotShotRecyclerAdapter hotShotRecyclerAdapter;
+    private List<ActiveHotShots> activeHotShotsList;
+
+    @BindView(R.id.hot_shot_swipe_list)
+    RecyclerView recyclerView;
+
+    @BindView(R.id.swipe_refresh_all)
+    SwipeRefreshLayout swipeRefreshLayout;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        Bundle bundle = getArguments();
         View view = inflater.inflate(R.layout.hots_shots_list, container, false);
-        listView = (ListView) view.findViewById(R.id.hot_shot_swipe_list);
-        swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_refresh_all);
+        ButterKnife.bind(this,view);
+
+        recyclerView.setHasFixedSize(false);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        refreshThisFragment(bundle.getInt(CATEGORY_TYPE));
         return view;
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         Bundle bundle = getArguments();
+        final int categoryType = bundle.getInt(CATEGORY_TYPE);
         super.onActivityCreated(savedInstanceState);
 
-        UniversalRefresh.UniwersalRefreshById(getActivity(), listView, bundle.getInt(CATEGORY_TYPE));
-        final Activity thisActivity = getActivity();
-
-//        final SwipeRefreshLayout swipeRefreshElectronic = (SwipeRefreshLayout) getActivity().findViewById(R.id.swipe_refresh_all);
         swipeRefreshLayout.setColorSchemeColors(UniversalRefresh.orangeColor,UniversalRefresh.lighterOrangeColor);
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -52,14 +67,19 @@ public class HotShotFragment extends Fragment {
                 AsyncTaskHotShot hotShotsAsync = new AsyncTaskHotShot(new Runnable() {
                     @Override
                     public void run() {
-                        UniversalRefresh.RefreshCategoriesAndWebPages(getContext());
-                        UniversalRefresh.RefreshAllIfPossible(thisActivity);
                         swipeRefreshLayout.setRefreshing(false);
+                        refreshThisFragment(categoryType);
                     }
                 },getContext(),true);
                 hotShotsAsync.execute();
             }
         });
+    }
+
+    public void refreshThisFragment(int categoryType){
+        activeHotShotsList = ActiveHotShots.ReturnAllActiveHotShotsActive(categoryType);
+        hotShotRecyclerAdapter = new HotShotRecyclerAdapter(activeHotShotsList,getContext());
+        recyclerView.setAdapter(hotShotRecyclerAdapter);
     }
 
 }

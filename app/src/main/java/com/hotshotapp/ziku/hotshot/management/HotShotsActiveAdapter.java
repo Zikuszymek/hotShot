@@ -101,8 +101,6 @@ public class HotShotsActiveAdapter extends ArrayAdapter<ActiveHotShots> {
             }
         });
 
-        final View thisImageView = imageView;
-
         imageView.setFocusable(true);
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
