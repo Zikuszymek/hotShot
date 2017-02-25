@@ -44,6 +44,8 @@
     <string name="wlaczone">Aktywne</string>
     <string name="wylaczone">Niekatywne</string>
 
+    <string name="transition_image">transition_image</string>
+
     <string name="key_check_for_updates">key_check_for_updates</string>
     <string name="key_sync_background">key_sync_bacground</string>
     <string name="key_sync_wifi">key_sync_wifi</string>

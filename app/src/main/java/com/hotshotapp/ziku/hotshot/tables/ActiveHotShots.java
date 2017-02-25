@@ -1,5 +1,8 @@
 package com.hotshotapp.ziku.hotshot.tables;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.activeandroid.Model;
 import com.activeandroid.annotation.Table;
 import com.activeandroid.annotation.Column;
@@ -15,7 +18,7 @@ import java.util.List;
  * Created by Ziku on 2016-09-11.
  */
 @Table(name = ActiveHotShots.HOT_SHOT_TABLE)
-public class ActiveHotShots extends Model implements Comparable<ActiveHotShots>{
+public class ActiveHotShots extends Model implements Comparable<ActiveHotShots>,Parcelable{
 
     public static final String HOT_SHOT_TABLE = "hot_shots_table";
     public static final String HOT_SHOT_WEB_ID = "hot_shot_web_id";
@@ -100,4 +103,43 @@ public class ActiveHotShots extends Model implements Comparable<ActiveHotShots>{
         return  returnList;
     }
 
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeString(productName);
+        parcel.writeInt(oldPrice);
+        parcel.writeInt(newPrice);
+        parcel.writeString(imgUrl);
+        parcel.writeString(productUrl);
+        parcel.writeParcelable(webSites,i);
+        parcel.writeString(lastNotyfication);
+        parcel.writeLong(lastNewChange.getTime());
+    }
+
+    private ActiveHotShots(Parcel parcel){
+        this.productName = parcel.readString();
+        this.oldPrice = parcel.readInt();
+        this.newPrice = parcel.readInt();
+        this.imgUrl = parcel.readString();
+        this.productUrl = parcel.readString();
+        this.webSites = parcel.readParcelable(ActiveWebSites.class.getClassLoader());
+        this.lastNotyfication = parcel.readString();
+        this.lastNewChange = new Date(parcel.readLong());
+    }
+
+    public static final Parcelable.Creator<ActiveHotShots> CREATOR = new Creator<ActiveHotShots>() {
+        @Override
+        public ActiveHotShots createFromParcel(Parcel parcel) {
+            return new ActiveHotShots(parcel);
+        }
+
+        @Override
+        public ActiveHotShots[] newArray(int i) {
+            return new ActiveHotShots[i];
+        }
+    };
 }

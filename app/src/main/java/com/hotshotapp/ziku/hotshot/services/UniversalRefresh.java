@@ -63,7 +63,6 @@ public class UniversalRefresh {
         if (networkInfo != null) {
 
             if (networkInfo.isConnectedOrConnecting()) {
-                Log.d("TEST", "Connected or connecting");
 
                 SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
                 final SharedPreferences.Editor editor = sharedPreferences.edit();
@@ -84,15 +83,12 @@ public class UniversalRefresh {
                 if (lastCheck == 0 || (currentTime - lastCheck > HOURS_24)) {
                     refreshCategories.execute();
                 } else {
-                    Log.d("TEST", "DB up to date");
                 }
             } else {
                 AlerDialogWithMessage(INTERNET_ERROR, context);
-                Log.d("TEST", "No internet connection");
             }
         } else {
             AlerDialogWithMessage(INTERNET_ERROR, context);
-            Log.d("TEST", "Network info is null");
         }
     }
 
@@ -242,7 +238,7 @@ public class UniversalRefresh {
 
         Notification notification = notificationBuilder.build();
         if (SharedSettingsHS.GetPreferenceBoolen(context.getString(R.string.key_vibration), context)) {
-            long[] steps = {0, 300, 250, 200, 100, 150};
+            long[] steps = {0, 150};
             notification.vibrate = steps;
         }
         return notification;

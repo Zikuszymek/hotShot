@@ -26,7 +26,7 @@
                 android:padding="@dimen/short_card_viewv_margin"
                 android:layout_weight="1"
                 android:src="@drawable/hot_shot_orange"
-                android:transitionName="hotshotImage" />
+                android:transitionName="@string/transition_image"/>
 
             <TextView
                 android:id="@+id/web_site_name"
@@ -60,7 +60,7 @@
                 android:paddingTop="5sp"
                 android:text="HOTSHOT HOTSHOT HOTSHOT"
                 android:textColor="#F000"
-                android:textSize="15sp" />
+                android:textSize="@dimen/text_description_size" />
 
             <View
                 android:layout_width="match_parent"
@@ -86,7 +86,7 @@
                         android:paddingTop="2dp"
                         android:text="200 zł"
                         android:textColor="#F000"
-                        android:textSize="22sp" />
+                        android:textSize="@dimen/text_price_size" />
                 </LinearLayout>
             </LinearLayout>
         </LinearLayout>

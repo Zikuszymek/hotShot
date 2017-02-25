@@ -45,19 +45,19 @@ public class HotShotFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         Bundle bundle = getArguments();
+        int refreshedId = (bundle.getInt(CATEGORY_TYPE));
         View view = inflater.inflate(R.layout.hots_shots_list, container, false);
         ButterKnife.bind(this,view);
 
         recyclerView.setHasFixedSize(false);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        refreshThisFragment(bundle.getInt(CATEGORY_TYPE));
+        hotShotRecyclerAdapter = new HotShotRecyclerAdapter(getActivity(),refreshedId);
+        recyclerView.setAdapter(hotShotRecyclerAdapter);
         return view;
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        Bundle bundle = getArguments();
-        final int categoryType = bundle.getInt(CATEGORY_TYPE);
         super.onActivityCreated(savedInstanceState);
 
         swipeRefreshLayout.setColorSchemeColors(UniversalRefresh.orangeColor,UniversalRefresh.lighterOrangeColor);
@@ -68,18 +68,19 @@ public class HotShotFragment extends Fragment {
                     @Override
                     public void run() {
                         swipeRefreshLayout.setRefreshing(false);
-                        refreshThisFragment(categoryType);
+                        refreshThisFragment();
                     }
                 },getContext(),true);
                 hotShotsAsync.execute();
             }
         });
+
     }
 
-    public void refreshThisFragment(int categoryType){
-        activeHotShotsList = ActiveHotShots.ReturnAllActiveHotShotsActive(categoryType);
-        hotShotRecyclerAdapter = new HotShotRecyclerAdapter(activeHotShotsList,getContext());
-        recyclerView.setAdapter(hotShotRecyclerAdapter);
+    public void refreshThisFragment(){
+        if(hotShotRecyclerAdapter!=null){
+            hotShotRecyclerAdapter.refrehstDataSet();
+        }
     }
 
 }

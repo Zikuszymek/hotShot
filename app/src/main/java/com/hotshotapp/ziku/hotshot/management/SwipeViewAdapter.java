@@ -50,7 +50,7 @@ public class SwipeViewAdapter extends FragmentStatePagerAdapter{
 
     public void refreshAllCreatedFragments(){
         for(Map.Entry<Integer,HotShotFragment> hotShotFragment : integerHotShotFragmentMap.entrySet()){
-            hotShotFragment.getValue().refreshThisFragment(hotShotFragment.getKey());
+            hotShotFragment.getValue().refreshThisFragment();
         }
     }
 

@@ -1,29 +1,29 @@
 package com.hotshotapp.ziku.hotshot.management;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityOptionsCompat;
+import android.support.v4.util.Pair;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
-
 import com.hotshotapp.ziku.hotshot.R;
+import com.hotshotapp.ziku.hotshot.ShowImageActivity;
 import com.hotshotapp.ziku.hotshot.tables.ActiveHotShots;
-
 import java.io.File;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-/**
- * Created by Ziku on 2017-02-23.
- */
 
 public class HotShotRecyclerAdapter extends RecyclerView.Adapter<HotShotRecyclerAdapter.ViewHolder> {
 
@@ -32,13 +32,22 @@ public class HotShotRecyclerAdapter extends RecyclerView.Adapter<HotShotRecycler
 
     private static final int ITEM_TYPE_FULL = 1;
     private static final int ITEM_TYPE_PART = 2;
+    private int itemTYpe;
 
     private List<ActiveHotShots> activeHotShotsList;
     private Context context;
+    private Activity activity;
 
-    public HotShotRecyclerAdapter(List<ActiveHotShots> activeHotShotsList, Context context) {
-        this.activeHotShotsList = activeHotShotsList;
-        this.context = context;
+    public HotShotRecyclerAdapter(Activity activity, int itemType) {
+        this.context = activity.getApplicationContext();
+        this.itemTYpe = itemType;
+        this.activity = activity;
+        refrehstDataSet();
+    }
+
+    public void refrehstDataSet(){
+        activeHotShotsList = ActiveHotShots.ReturnAllActiveHotShotsActive(itemTYpe);
+        notifyDataSetChanged();
     }
 
     @Override
@@ -62,7 +71,7 @@ public class HotShotRecyclerAdapter extends RecyclerView.Adapter<HotShotRecycler
             holder.productName.setText(activeHotShots.productName);
         }
 
-        holder.newPrie.setText(String.format("%d zl",activeHotShots.newPrice));
+        holder.newPrie.setText(String.format("%d zł",activeHotShots.newPrice));
 
         if(activeHotShots.oldPrice != 0) {
             String oldPriceString = String.valueOf(activeHotShots.oldPrice) + " zł";
@@ -88,7 +97,7 @@ public class HotShotRecyclerAdapter extends RecyclerView.Adapter<HotShotRecycler
                 holder.imageView.setImageResource(R.drawable.hot_shot_icon);
             }
         }
-
+        holder.cardView.setOnClickListener(getOnClickListenerForAdapterItem(context,activeHotShots,fileName,holder.imageView));
         holder.cardView.requestLayout();
     }
 
@@ -105,7 +114,23 @@ public class HotShotRecyclerAdapter extends RecyclerView.Adapter<HotShotRecycler
         return ITEM_TYPE_PART;
     }
 
-    public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+    private View.OnClickListener getOnClickListenerForAdapterItem(final Context context, final ActiveHotShots activeHotShots, final String fileName, View view){
+        return new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(activity,ShowImageActivity.class);
+                intent.putExtra(ShowImageActivity.DATA_FOR_DETAILS,activeHotShots);
+                intent.putExtra(ShowImageActivity.IMG_URL,fileName);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
+                Pair<View,String> pair = Pair.create(view,context.getString(R.string.transition_image));
+//                ActivityOptionsCompat activityOptionsCompat = ActivityOptionsCompat.makeSceneTransitionAnimation(activity,pair);
+                context.startActivity(intent);
+            }
+        };
+    }
+
+    public static class ViewHolder extends RecyclerView.ViewHolder{
 
         @Nullable
         @BindView(R.id.old_price)
@@ -134,11 +159,6 @@ public class HotShotRecyclerAdapter extends RecyclerView.Adapter<HotShotRecycler
         public ViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this,itemView);
-        }
-
-        @Override
-        public void onClick(View view) {
-
         }
     }
 }

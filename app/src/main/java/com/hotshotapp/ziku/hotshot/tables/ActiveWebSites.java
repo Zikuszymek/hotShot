@@ -1,6 +1,8 @@
 package com.hotshotapp.ziku.hotshot.tables;
 
 import android.database.Cursor;
+import android.os.Parcel;
+import android.os.Parcelable;
 
 import com.activeandroid.Cache;
 import com.activeandroid.annotation.Column;
@@ -13,7 +15,7 @@ import com.google.gson.annotations.SerializedName;
  * Created by Ziku on 2016-09-11.
  */
 @Table(name = ActiveWebSites.WEB_SITE_TABLE)
-public class ActiveWebSites extends Model{
+public class ActiveWebSites extends Model implements Parcelable{
 
     public static final String WEB_SITE_TABLE = "web_sites_table";
     public static final String WEB_SITE_NAME = "name_web_page";
@@ -62,4 +64,39 @@ public class ActiveWebSites extends Model{
     }
 
 
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeParcelable(activeCategory,i);
+        parcel.writeString(webSiteName);
+        parcel.writeString(webSIteUrl);
+        parcel.writeInt(isActive ? 1 : 0);
+        parcel.writeInt(notifyUser ? 1 : 0);
+        parcel.writeInt(activeFromServer ? 1 :0);
+    }
+
+    private ActiveWebSites(Parcel parcel){
+        this.activeCategory = parcel.readParcelable(ActiveCategories.class.getClassLoader());
+        this.webSiteName = parcel.readString();
+        this.webSIteUrl = parcel.readString();
+        this.isActive = parcel.readInt()!=0;
+        this.notifyUser = parcel.readInt()!=0;
+        this.activeFromServer = parcel.readInt()!=0;
+    }
+
+    public static final Parcelable.Creator<ActiveWebSites> CREATOR = new Creator<ActiveWebSites>() {
+        @Override
+        public ActiveWebSites createFromParcel(Parcel parcel) {
+            return new ActiveWebSites(parcel);
+        }
+
+        @Override
+        public ActiveWebSites[] newArray(int i) {
+            return new ActiveWebSites[i];
+        }
+    };
 }
