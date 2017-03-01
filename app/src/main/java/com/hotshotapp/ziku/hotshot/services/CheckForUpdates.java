@@ -49,8 +49,6 @@ public class CheckForUpdates extends AsyncTask<Void,Void,Void>{
             currentVersion = null;
         }
 
-        Log.d("TEST","Wersja: " + (currentVersion) +  " : " + newVersion);
-
         if(UpdateIsNeededCheckVersions(currentVersion,newVersion)){
             Intent intent = new Intent(context, UpdateToNewVersionActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);

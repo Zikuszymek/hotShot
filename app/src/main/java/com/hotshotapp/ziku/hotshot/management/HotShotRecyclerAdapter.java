@@ -4,7 +4,9 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Build;
 import android.support.annotation.Nullable;
+import android.support.transition.TransitionManager;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.util.Pair;
 import android.support.v7.widget.CardView;
@@ -14,10 +16,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import com.bumptech.glide.Glide;
 import com.hotshotapp.ziku.hotshot.R;
 import com.hotshotapp.ziku.hotshot.ShowImageActivity;
 import com.hotshotapp.ziku.hotshot.tables.ActiveHotShots;
+
 import java.io.File;
 import java.util.List;
 
@@ -37,43 +44,64 @@ public class HotShotRecyclerAdapter extends RecyclerView.Adapter<HotShotRecycler
     private List<ActiveHotShots> activeHotShotsList;
     private Context context;
     private Activity activity;
+    private View emptyElement;
+//    private ViewGroup viewGroup;
+    private ActivityReactionOnAdapter activityReaction;
 
-    public HotShotRecyclerAdapter(Activity activity, int itemType) {
+    public HotShotRecyclerAdapter(Activity activity, int itemType, View emptyElement) {
         this.context = activity.getApplicationContext();
         this.itemTYpe = itemType;
         this.activity = activity;
+        this.emptyElement = emptyElement;
+        this.activityReaction = (ActivityReactionOnAdapter)activity;
+//        this.viewGroup = viewGroup;
         refrehstDataSet();
     }
 
-    public void refrehstDataSet(){
+    public void refrehstDataSet() {
         activeHotShotsList = ActiveHotShots.ReturnAllActiveHotShotsActive(itemTYpe);
+        if (activeHotShotsList.size() == 0 || activeHotShotsList == null) {
+            setEmptyElementVisible(true);
+        } else {
+            setEmptyElementVisible(false);
+        }
         notifyDataSetChanged();
+    }
+
+    private void setEmptyElementVisible(boolean isVisible) {
+        if (isVisible) {
+            emptyElement.setVisibility(View.VISIBLE);
+        } else {
+            emptyElement.setVisibility(View.GONE);
+        }
     }
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View viewHolder;
         LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
-        if(viewType==ITEM_TYPE_FULL){
-            viewHolder = layoutInflater.inflate(R.layout.list_element,parent,false);
+        if (viewType == ITEM_TYPE_FULL) {
+            viewHolder = layoutInflater.inflate(R.layout.list_element, parent, false);
         } else {
-            viewHolder = layoutInflater.inflate(R.layout.list_element_simple,parent,false);
+            viewHolder = layoutInflater.inflate(R.layout.list_element_simple, parent, false);
         }
+        ((ViewGroup)viewHolder).setClipChildren(false);
+        ((ViewGroup)viewHolder).setClipToPadding(false);
         return new HotShotRecyclerAdapter.ViewHolder(viewHolder);
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
-        ActiveHotShots activeHotShots = activeHotShotsList.get(position);
-        if(activeHotShots.webSites.webSiteName.equals(OTHERTEES)){
-            holder.productName.setText(String.format("%s \n %s",PATTERN,activeHotShots.productName));
+    public void onBindViewHolder(final ViewHolder holder, int position) {
+        final ActiveHotShots activeHotShots = activeHotShotsList.get(position);
+        if (activeHotShots.webSites.webSiteName.equals(OTHERTEES)) {
+            holder.productName.setText(String.format("%s \n %s", PATTERN, activeHotShots.productName));
         } else {
             holder.productName.setText(activeHotShots.productName);
         }
 
-        holder.newPrie.setText(String.format("%d zł",activeHotShots.newPrice));
+        holder.newPrie.setText(String.format("%d zł", activeHotShots.newPrice));
 
-        if(activeHotShots.oldPrice != 0) {
+        if (activeHotShots.oldPrice != 0) {
             String oldPriceString = String.valueOf(activeHotShots.oldPrice) + " zł";
             if (activeHotShots.oldPrice != 0 && activeHotShots.newPrice != 0) {
                 int percentage = ((activeHotShots.oldPrice - activeHotShots.newPrice) * 100) / activeHotShots.oldPrice;
@@ -89,15 +117,20 @@ public class HotShotRecyclerAdapter extends RecyclerView.Adapter<HotShotRecycler
 
         final String fileName = activeHotShots.webSites.webSiteName + String.valueOf(activeHotShots.getId()) + ".png";
         File file = context.getFileStreamPath(fileName);
-        if(file.exists()){
-            if(file.length() > 0){
+        if (file.exists()) {
+            if (file.length() > 0) {
                 Uri uri = Uri.fromFile(file);
-                holder.imageView.setImageURI(uri);
+                Glide.with(context).load(uri).into(holder.imageView);
             } else {
-                holder.imageView.setImageResource(R.drawable.hot_shot_icon);
+                Glide.with(context).load(R.drawable.hot_shot_icon).into(holder.imageView);
             }
         }
-        holder.cardView.setOnClickListener(getOnClickListenerForAdapterItem(context,activeHotShots,fileName,holder.imageView));
+        holder.cardView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                activityReaction.doActivityAction(activeHotShots,fileName);
+            }
+        });
         holder.cardView.requestLayout();
     }
 
@@ -108,29 +141,18 @@ public class HotShotRecyclerAdapter extends RecyclerView.Adapter<HotShotRecycler
 
     @Override
     public int getItemViewType(int position) {
-        if(activeHotShotsList.get(position).oldPrice != 0){
+        if (activeHotShotsList.get(position).oldPrice != 0) {
             return ITEM_TYPE_FULL;
         }
         return ITEM_TYPE_PART;
     }
 
-    private View.OnClickListener getOnClickListenerForAdapterItem(final Context context, final ActiveHotShots activeHotShots, final String fileName, View view){
-        return new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(activity,ShowImageActivity.class);
-                intent.putExtra(ShowImageActivity.DATA_FOR_DETAILS,activeHotShots);
-                intent.putExtra(ShowImageActivity.IMG_URL,fileName);
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
-                Pair<View,String> pair = Pair.create(view,context.getString(R.string.transition_image));
-//                ActivityOptionsCompat activityOptionsCompat = ActivityOptionsCompat.makeSceneTransitionAnimation(activity,pair);
-                context.startActivity(intent);
-            }
-        };
+    public interface ActivityReactionOnAdapter{
+        void doActivityAction(ActiveHotShots activeHotShots,String fileName);
     }
 
-    public static class ViewHolder extends RecyclerView.ViewHolder{
+    public static class ViewHolder extends RecyclerView.ViewHolder {
 
         @Nullable
         @BindView(R.id.old_price)
@@ -156,9 +178,21 @@ public class HotShotRecyclerAdapter extends RecyclerView.Adapter<HotShotRecycler
         @BindView(R.id.card_view_layout)
         CardView cardView;
 
+        @Nullable
+        @BindView(R.id.separate_line)
+        View sideLineSeparator;
+
+        @Nullable
+        @BindView(R.id.contener_with_image)
+        LinearLayout imageContent;
+
+        @Nullable
+        @BindView(R.id.content_layout)
+        LinearLayout contentLayout;
+
         public ViewHolder(View itemView) {
             super(itemView);
-            ButterKnife.bind(this,itemView);
+            ButterKnife.bind(this, itemView);
         }
     }
 }

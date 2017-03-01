@@ -1,6 +1,5 @@
 package com.hotshotapp.ziku.hotshot.management;
 
-
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -9,12 +8,10 @@ import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ListView;
-
+import android.widget.LinearLayout;
 import com.hotshotapp.ziku.hotshot.R;
 import com.hotshotapp.ziku.hotshot.jsonservices.AsyncTaskHotShot;
 import com.hotshotapp.ziku.hotshot.services.UniversalRefresh;
@@ -34,12 +31,16 @@ public class HotShotFragment extends Fragment {
 
     private HotShotRecyclerAdapter hotShotRecyclerAdapter;
     private List<ActiveHotShots> activeHotShotsList;
+    private HotShotRecyclerAdapter.ActivityReactionOnAdapter activityReactionOnAdapter;
 
     @BindView(R.id.hot_shot_swipe_list)
     RecyclerView recyclerView;
 
     @BindView(R.id.swipe_refresh_all)
     SwipeRefreshLayout swipeRefreshLayout;
+
+    @BindView(R.id.empty_view_element)
+    LinearLayout emptyElement;
 
     @Nullable
     @Override
@@ -51,7 +52,7 @@ public class HotShotFragment extends Fragment {
 
         recyclerView.setHasFixedSize(false);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        hotShotRecyclerAdapter = new HotShotRecyclerAdapter(getActivity(),refreshedId);
+        hotShotRecyclerAdapter = new HotShotRecyclerAdapter(getActivity(),refreshedId,emptyElement);
         recyclerView.setAdapter(hotShotRecyclerAdapter);
         return view;
     }

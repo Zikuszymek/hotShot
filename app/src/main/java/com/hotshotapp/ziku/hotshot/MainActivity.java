@@ -10,6 +10,9 @@ import android.os.Bundle;
 import android.os.PowerManager;
 import android.provider.Settings;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.ActivityOptionsCompat;
+import android.support.v4.util.Pair;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
@@ -20,16 +23,19 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 
 
+import com.hotshotapp.ziku.hotshot.management.HotShotRecyclerAdapter;
 import com.hotshotapp.ziku.hotshot.management.SharedSettingsHS;
 import com.hotshotapp.ziku.hotshot.management.SwipeViewAdapter;
 import com.hotshotapp.ziku.hotshot.jsonservices.RESTRequestAndCallback;
 import com.hotshotapp.ziku.hotshot.jsonservices.RetrofitRequestHotshot;
 import com.hotshotapp.ziku.hotshot.services.HotShotAlarmReceiver;
 import com.hotshotapp.ziku.hotshot.services.UniversalRefresh;
+import com.hotshotapp.ziku.hotshot.tables.ActiveHotShots;
 
-public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, HotShotRecyclerAdapter.ActivityReactionOnAdapter {
 
     private ImageButton allButton;
     private ImageButton electronicButton;
@@ -51,9 +57,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_hotshot);
         setSupportActionBar(toolbar);
 
-        DrawerLayout drawerLayout = (DrawerLayout)findViewById(R.id.drawer_layout);
+        DrawerLayout drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toogle = new ActionBarDrawerToggle(
-                this, drawerLayout, toolbar, R.string.open_drawer,R.string.close_drawer);
+                this, drawerLayout, toolbar, R.string.open_drawer, R.string.close_drawer);
         drawerLayout.addDrawerListener(toogle);
         toogle.syncState();
 
@@ -83,7 +89,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             @Override
             public void onPageSelected(int position) {
                 SetAllButtonsNormal();
-                switch (position){
+                switch (position) {
                     case 0:
                         SetAllHSButtonActive();
                         break;
@@ -110,7 +116,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         allButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                viewPager.setCurrentItem(0,true);
+                viewPager.setCurrentItem(0, true);
                 SetAllButtonsNormal();
                 SetAllHSButtonActive();
             }
@@ -119,7 +125,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         electronicButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                viewPager.setCurrentItem(1,true);
+                viewPager.setCurrentItem(1, true);
                 SetAllButtonsNormal();
                 SetElectronicHSButtonActive();
             }
@@ -128,7 +134,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         otherButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                viewPager.setCurrentItem(2,true);
+                viewPager.setCurrentItem(2, true);
                 SetAllButtonsNormal();
                 SetOtherHSButtonActive();
             }
@@ -137,7 +143,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         bookButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                viewPager.setCurrentItem(3,true);
+                viewPager.setCurrentItem(3, true);
                 SetAllButtonsNormal();
                 SetBookHSButtonActive();
             }
@@ -146,9 +152,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         clothesButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                viewPager.setCurrentItem(4,true);
+                viewPager.setCurrentItem(4, true);
                 SetAllButtonsNormal();
                 SetClothesButtonActive();
+                Intent intent = new Intent(MainActivity.this, UpdateToNewVersionActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
             }
         });
 
@@ -157,8 +166,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         int id = item.getItemId();
-        OnNavigationMenuChange(id,this);
-        DrawerLayout drawerLayout = (DrawerLayout)findViewById(R.id.drawer_layout);
+        OnNavigationMenuChange(id, this);
+        DrawerLayout drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawerLayout.closeDrawer(GravityCompat.START);
         return true;
     }
@@ -175,7 +184,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         UniversalRefresh.AddNewGlobalInformationIfDoesNotExist(this);
         UniversalRefresh.RemoveAllNotifications(this);
         UniversalRefresh.RefreshAllIfNoLongedRefreshed(this);
-        if(SharedSettingsHS.GetPreferenceBoolen(getString(R.string.key_check_for_updates),getApplicationContext())) {
+        if (SharedSettingsHS.GetPreferenceBoolen(getString(R.string.key_check_for_updates), getApplicationContext())) {
             UniversalRefresh.CheckForNewAPKVersion(this);
         }
         SetServiceAlarmManager();
@@ -202,12 +211,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     protected void onDestroy() {
-        Log.d("SERVIS","Activity Destroyed");
+        Log.d("SERVIS", "Activity Destroyed");
         super.onDestroy();
     }
 
     private void SetHotShotsListView() {
-        if(swipeViewAdapter!=null){
+        if (swipeViewAdapter != null) {
             swipeViewAdapter.refreshAllCreatedFragments();
         }
     }
@@ -217,32 +226,32 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         HotShotAlarmReceiver.SetAlarmManager(this);
     }
 
-    private void SetAllHSButtonActive(){
+    private void SetAllHSButtonActive() {
         allButton.setBackgroundColor(whiteColor);
         allButton.setImageResource(R.drawable.hotshot_button_orange);
     }
 
-    private void SetElectronicHSButtonActive(){
+    private void SetElectronicHSButtonActive() {
         electronicButton.setBackgroundColor(whiteColor);
         electronicButton.setImageResource(R.drawable.electronic_button_orange);
     }
 
-    private void SetOtherHSButtonActive(){
+    private void SetOtherHSButtonActive() {
         otherButton.setBackgroundColor(whiteColor);
         otherButton.setImageResource(R.drawable.other_button_orange);
     }
 
-    private void SetBookHSButtonActive(){
+    private void SetBookHSButtonActive() {
         bookButton.setImageResource(R.drawable.books_button_orange);
         bookButton.setBackgroundColor(whiteColor);
     }
 
-    private void SetClothesButtonActive(){
+    private void SetClothesButtonActive() {
         clothesButton.setImageResource(R.drawable.clothes_orange);
         clothesButton.setBackgroundColor(whiteColor);
     }
 
-    private void SetAllButtonsNormal(){
+    private void SetAllButtonsNormal() {
         bookButton.setImageResource(R.drawable.books_button_white);
         bookButton.setBackgroundColor(orangeColor);
         otherButton.setBackgroundColor(orangeColor);
@@ -255,39 +264,39 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         clothesButton.setBackgroundColor(orangeColor);
     }
 
-    public static void OnNavigationMenuChange(int id, Context context){
-        switch (id){
+    public static void OnNavigationMenuChange(int id, Context context) {
+        switch (id) {
             case R.id.okazje:
-                if(!MainActivity.ACTIVITY_ACTIVE){
-                    Intent activityIntent = new Intent(context,MainActivity.class);
+                if (!MainActivity.ACTIVITY_ACTIVE) {
+                    Intent activityIntent = new Intent(context, MainActivity.class);
                     activityIntent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
                     context.startActivity(activityIntent);
                 }
-                if(SettingsActivity.thisSettingsActivity!=null){
+                if (SettingsActivity.thisSettingsActivity != null) {
                     SettingsActivity.thisSettingsActivity.finish();
                 }
 
-                if(Info.thisInfo!=null){
+                if (Info.thisInfo != null) {
                     Info.thisInfo.finish();
                 }
                 break;
             case R.id.strony:
-                if(!PreferencesSettingsActivity.ACTIVITY_ACTIVE) {
+                if (!PreferencesSettingsActivity.ACTIVITY_ACTIVE) {
                     Intent openSettingsActivity = new Intent(context, PreferencesSettingsActivity.class);
                     openSettingsActivity.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
                     context.startActivity(openSettingsActivity);
                 }
-                if(Info.thisInfo!=null){
+                if (Info.thisInfo != null) {
                     Info.thisInfo.finish();
                 }
                 break;
             case R.id.informacje:
-                if(!Info.ACTIVITY_ACTIVE){
-                    Intent openInfoActivity = new Intent(context,Info.class);
+                if (!Info.ACTIVITY_ACTIVE) {
+                    Intent openInfoActivity = new Intent(context, Info.class);
                     openInfoActivity.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
                     context.startActivity(openInfoActivity);
                 }
-                if(SettingsActivity.thisSettingsActivity!=null){
+                if (SettingsActivity.thisSettingsActivity != null) {
                     SettingsActivity.thisSettingsActivity.finish();
                 }
                 break;
@@ -304,11 +313,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 break;
             case R.id.ocen:
                 Uri uri = Uri.parse("market://details?id=" + context.getPackageName());
-                Intent goToShopIntent = new Intent(Intent.ACTION_VIEW,uri);
+                Intent goToShopIntent = new Intent(Intent.ACTION_VIEW, uri);
 
-                try{
+                try {
                     context.startActivity(goToShopIntent);
-                } catch (ActivityNotFoundException ex){
+                } catch (ActivityNotFoundException ex) {
                     context.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("http://play.google.com/store/apps/details?id=" + context.getPackageName())));
                 }
 
@@ -316,8 +325,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
     }
 
-    private void requestIgnoreBatteryOptymalization(Context context){
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+    private void requestIgnoreBatteryOptymalization(Context context) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             Intent intent = new Intent();
             String packageName = context.getPackageName();
             PowerManager pm = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
@@ -332,4 +341,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
     }
 
+    @Override
+    public void doActivityAction(ActiveHotShots activeHotShots, String fileName) {
+
+        Intent intent = new Intent(this, ShowImageActivity.class);
+        intent.putExtra(ShowImageActivity.DATA_FOR_DETAILS, activeHotShots);
+        intent.putExtra(ShowImageActivity.IMG_URL, fileName);
+        this.startActivity(intent);
+    }
 }

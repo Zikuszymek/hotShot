@@ -1,63 +1,69 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/activity_update_to_new_version"
-    android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#FFFF"
-    android:orientation="vertical"
-    android:paddingBottom="@dimen/activity_horizontal_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_horizontal_margin"
-    tools:context="com.hotshotapp.ziku.hotshot.UpdateToNewVersionActivity">
+    android:layout_width="match_parent"
+    android:background="@android:drawable/screen_background_dark_transparent">
 
-    <LinearLayout
+    <FrameLayout xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/activity_update_to_new_version"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_margin="30dp"
+        android:background="#FFFF"
         android:orientation="vertical"
-        android:layout_gravity="center">
+        android:paddingBottom="@dimen/activity_horizontal_margin"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:paddingTop="@dimen/activity_horizontal_margin"
+        tools:context="com.hotshotapp.ziku.hotshot.UpdateToNewVersionActivity">
 
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/hot_shot_icon"
-            android:layout_gravity="center"/>
-
-        <TextView
-            android:id="@+id/textView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@color/blackCOlor"
-            android:textSize="18sp"
-            android:textAlignment="center"
-            android:text="@string/aktualizacja" />
-
-    </LinearLayout>
-    <LinearLayout
-        android:layout_gravity="center|bottom"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <Button
-            style="@style/Widget.AppCompat.Button.Colored"
-            android:theme="@style/ColoredButton"
-            android:id="@+id/update_button"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:textSize="18sp"
-            android:text="AKTUALIZUJ"
-           />
+            android:layout_gravity="center"
+            android:orientation="vertical">
 
-        <Button
-            style="@style/Widget.AppCompat.Button.Colored"
-            android:theme="@style/ColoredButton"
-            android:id="@+id/not_now_button"
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:src="@drawable/hot_shot_icon" />
+
+            <TextView
+                android:id="@+id/textView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/aktualizacja"
+                android:textAlignment="center"
+                android:textColor="@color/blackCOlor"
+                android:textSize="18sp" />
+
+        </LinearLayout>
+
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:textSize="18sp"
-            android:text="NIE TERAZ" />
-    </LinearLayout>
+            android:layout_gravity="center|bottom">
+
+            <Button
+                android:id="@+id/update_button"
+                style="@style/Widget.AppCompat.Button.Colored"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="AKTUALIZUJ"
+                android:textSize="18sp"
+                android:theme="@style/ColoredButton" />
+
+            <Button
+                android:id="@+id/not_now_button"
+                style="@style/Widget.AppCompat.Button.Colored"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="NIE TERAZ"
+                android:textSize="18sp"
+                android:theme="@style/ColoredButton" />
+        </LinearLayout>
+    </FrameLayout>
 </FrameLayout>

@@ -32,35 +32,30 @@ public class UpdateToNewVersionActivity extends AppCompatActivity {
 
         ButterKnife.bind(this);
 
-//        acceptButton = (Button) findViewById(R.id.update_button);
-//        declineButton = (Button) findViewById(R.id.not_now_button);
+        acceptButton = (Button) findViewById(R.id.update_button);
+        declineButton = (Button) findViewById(R.id.not_now_button);
 
-//        acceptButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Uri uri = Uri.parse("market://details?id=" + context.getPackageName());
-//                Intent goToShopIntent = new Intent(Intent.ACTION_VIEW, uri);
-//
-//                try {
-//                    context.startActivity(goToShopIntent);
-//                } catch (ActivityNotFoundException ex) {
-//                    context.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("http://play.google.com/store/apps/details?id=" + context.getPackageName())));
-//                }
-//                finish();
-//            }
-//        });
-//
-//        declineButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                finish();
-//            }
-//        });
+        acceptButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Uri uri = Uri.parse("market://details?id=" + context.getPackageName());
+                Intent goToShopIntent = new Intent(Intent.ACTION_VIEW, uri);
 
-    }
+                try {
+                    context.startActivity(goToShopIntent);
+                } catch (ActivityNotFoundException ex) {
+                    context.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("http://play.google.com/store/apps/details?id=" + context.getPackageName())));
+                }
+                finish();
+            }
+        });
 
-    @OnClick(R.id.update_button)
-    public void update(){
+        declineButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
 
     }
 }

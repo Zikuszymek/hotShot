@@ -103,7 +103,7 @@ public class HotShotsGSONConverter {
         this.web_page = web_page;
     }
 
-    public Notification convertToActiveHotShot(Context context) {
+    public Notification convertToActiveHotShot(Context context,boolean forced) {
 
         Date now = new Date();
         Notification notificationToSend = null;
@@ -142,7 +142,7 @@ public class HotShotsGSONConverter {
                 }
 
                 boolean haveImageDownloaded = imageAndFilesManager.checkIfHotShotHaveImageDownloaded(activeWebSite.webSiteName,String.valueOf(activeHotShot.getId()));
-                if(!haveImageDownloaded) {
+                if(!haveImageDownloaded || forced) {
                     imageAndFilesManager.downloadImageForNewHotShotAndSaveIt(activeWebSite.webSiteName, String.valueOf(activeHotShot.getId()),activeHotShot.imgUrl);
                 }
                 activeHotShot.save();

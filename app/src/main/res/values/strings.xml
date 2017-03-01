@@ -52,4 +52,5 @@
     <string name="key_notyfication">key_notyfication</string>
     <string name="key_vibration">key_vibration</string>
     <string name="aktualizacja">Nowa wersja aplikacji HotShot jest gotowa do pobrania. Aby śledzić aktualne gorące oferty, zalecamy aktualizację aplikacji do najnowszej dostępnej wersji.</string>
+    <string name="refresht_data">Przesuń w dół aby odświeżyć dane</string>
 </resources>

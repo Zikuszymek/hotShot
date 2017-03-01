@@ -54,9 +54,9 @@ public class ImageAndFilesManager {
         FileOutputStream fileOutputStream = null;
         try {
             fileOutputStream = context.openFileOutput(fileName + ".png" , Context.MODE_PRIVATE);
-            if(bitmap.getByteCount() > (int) MAX_BITMAT_SIZE){
-                bitmap = Bitmap.createScaledBitmap(bitmap, (int) (bitmap.getWidth() * 0.5), (int) (bitmap.getHeight() * 0.5), true);
-            }
+//            if(bitmap.getByteCount() > (int) MAX_BITMAT_SIZE){
+//                bitmap = Bitmap.createScaledBitmap(bitmap, (int) (bitmap.getWidth() * 0.5), (int) (bitmap.getHeight() * 0.5), true);
+//            }
             bitmap.compress(Bitmap.CompressFormat.PNG, 100, fileOutputStream);
             fileOutputStream.flush();
             fileOutputStream.close();

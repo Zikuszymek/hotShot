@@ -71,7 +71,7 @@
         </activity>
 
         <activity android:name=".UpdateToNewVersionActivity"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:theme="@style/PopupActivity">
         </activity>
     </application>
 

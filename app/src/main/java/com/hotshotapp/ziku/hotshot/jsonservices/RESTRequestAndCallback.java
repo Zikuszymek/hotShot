@@ -57,7 +57,7 @@ public class RESTRequestAndCallback {
         try {
             List<HotShotsGSONConverter> hotShotsGSONConverterList = call.execute().body();
             for(HotShotsGSONConverter activeHotShots : hotShotsGSONConverterList){
-                Notification notification = activeHotShots.convertToActiveHotShot(context);
+                Notification notification = activeHotShots.convertToActiveHotShot(context,forced);
 
                 if(notification != null && !forced && SharedSettingsHS.GetPreferenceBoolen(context.getString(R.string.key_notyfication),context)){
                     NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);

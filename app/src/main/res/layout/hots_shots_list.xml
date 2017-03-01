@@ -1,22 +1,54 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
     <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/swipe_refresh_all"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@color/light_orange"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:id="@+id/empty_view_element"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:layout_gravity="center"
+                    android:layout_marginTop="20dp"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:src="@drawable/arrow_down"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:padding="1dp"
+                    android:text="@string/refresht_data"
+                    android:textAlignment="center"
+                    android:textColor="@color/hotShotColor"
+                    android:textSize="@dimen/ver_big_text"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/hot_shot_swipe_list"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:layout_marginBottom="2dp"
                 android:layout_marginLeft="2dp"
                 android:layout_marginRight="2dp"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@color/light_orange"
-                android:dividerHeight="0dp"
-                android:divider="@null">
-            </android.support.v7.widget.RecyclerView>
+                android:divider="@null"
+                android:dividerHeight="0dp"/>
+        </LinearLayout>
     </android.support.v4.widget.SwipeRefreshLayout>
 </LinearLayout>

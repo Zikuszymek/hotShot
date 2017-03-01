@@ -25,8 +25,7 @@ public class SwipeViewAdapter extends FragmentStatePagerAdapter{
 
     @Override
     public Fragment getItem(int position) {
-//        refreshAllCreatedFragments();
-        Log.d("SWIPE","swipe activities" + position);
+        refreshAllCreatedFragments();
         switch (position){
             case 0:
                 return addNewHotShotFragmentIfNotExist(0);

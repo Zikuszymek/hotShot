@@ -6,45 +6,54 @@
     android:layout_marginBottom="@dimen/short_card_viewv_margin"
     android:layout_marginTop="@dimen/short_card_viewv_margin"
     android:layout_marginLeft="@dimen/short_card_viewv_margin"
-    android:layout_marginRight="@dimen/short_card_viewv_margin">
+    android:layout_marginRight="@dimen/short_card_viewv_margin"
+    android:clipChildren="false"
+    android:clipToPadding="false">
 
-    <LinearLayout
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:layout_height="wrap_content">
 
         <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="3"
+            android:id="@+id/contener_with_image"
+            android:layout_alignBottom="@id/content_layout"
+            android:layout_alignParentTop="true"
+            android:layout_width="90dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
             android:orientation="vertical">
 
             <ImageView
                 android:id="@+id/product_image"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:padding="@dimen/short_card_viewv_margin"
                 android:layout_weight="1"
+                android:padding="@dimen/short_card_viewv_margin"
                 android:src="@drawable/hot_shot_orange"
                 android:transitionName="@string/transition_image"/>
 
             <TextView
                 android:id="@+id/web_site_name"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="3"
                 android:padding="@dimen/short_card_viewv_margin"
-                android:layout_weight="0.1"
                 android:gravity="center"
                 android:text="vendor" />
         </LinearLayout>
 
         <View
+            android:id="@+id/separate_line"
+            android:layout_alignRight="@id/contener_with_image"
+            android:layout_alignBottom="@+id/content_layout"
+            android:layout_alignParentTop="true"
             android:layout_width="2dp"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:background="@drawable/orange_gradient" />
 
         <LinearLayout
             android:id="@+id/content_layout"
+            android:layout_alignLeft="@+id/separate_line"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -90,5 +99,5 @@
                 </LinearLayout>
             </LinearLayout>
         </LinearLayout>
-    </LinearLayout>
+    </RelativeLayout>
 </android.support.v7.widget.CardView>
