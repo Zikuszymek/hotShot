@@ -35,18 +35,22 @@ import com.hotshotapp.ziku.hotshot.services.HotShotAlarmReceiver;
 import com.hotshotapp.ziku.hotshot.services.UniversalRefresh;
 import com.hotshotapp.ziku.hotshot.tables.ActiveHotShots;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, HotShotRecyclerAdapter.ActivityReactionOnAdapter {
 
-    private ImageButton allButton;
-    private ImageButton electronicButton;
-    private ImageButton otherButton;
-    private ImageButton bookButton;
-    private ImageButton clothesButton;
+
+    @BindView(R.id.all_button) ImageButton allButton;
+    @BindView(R.id.electronic_button) ImageButton electronicButton;
+    @BindView(R.id.others_button) ImageButton otherButton;
+    @BindView(R.id.books_button) ImageButton bookButton;
+    @BindView(R.id.clothes_button) ImageButton clothesButton;
+    @BindView(R.id.viewPager) ViewPager viewPager;
+    @BindView(R.id.nav_view) NavigationView navigationView;
     private int whiteColor;
     private int orangeColor;
     private SwipeViewAdapter swipeViewAdapter;
-    private ViewPager viewPager;
-    private NavigationView navigationView;
 
     public static boolean ACTIVITY_ACTIVE = false;
 
@@ -54,6 +58,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
+        ButterKnife.bind(this);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_hotshot);
         setSupportActionBar(toolbar);
 
@@ -63,20 +68,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         drawerLayout.addDrawerListener(toogle);
         toogle.syncState();
 
-        navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-
-        allButton = (ImageButton) findViewById(R.id.all_button);
-        electronicButton = (ImageButton) findViewById(R.id.electronic_button);
-        otherButton = (ImageButton) findViewById(R.id.others_button);
-        bookButton = (ImageButton) findViewById(R.id.books_button);
-        clothesButton = (ImageButton) findViewById(R.id.clothes_button);
 
         whiteColor = Color.parseColor("#FFFFFF");
         orangeColor = Color.parseColor("#FF6600");
 
         swipeViewAdapter = new SwipeViewAdapter(getSupportFragmentManager());
-        viewPager = (ViewPager) findViewById(R.id.viewPager);
         viewPager.setAdapter(swipeViewAdapter);
 
         SetAllHSButtonActive();
@@ -155,9 +152,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 viewPager.setCurrentItem(4, true);
                 SetAllButtonsNormal();
                 SetClothesButtonActive();
-                Intent intent = new Intent(MainActivity.this, UpdateToNewVersionActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                startActivity(intent);
             }
         });
 
@@ -184,9 +178,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         UniversalRefresh.AddNewGlobalInformationIfDoesNotExist(this);
         UniversalRefresh.RemoveAllNotifications(this);
         UniversalRefresh.RefreshAllIfNoLongedRefreshed(this);
-        if (SharedSettingsHS.GetPreferenceBoolen(getString(R.string.key_check_for_updates), getApplicationContext())) {
-            UniversalRefresh.CheckForNewAPKVersion(this);
-        }
+//        if (SharedSettingsHS.GetPreferenceBoolen(getString(R.string.key_check_for_updates), getApplicationContext())) {
+//            UniversalRefresh.CheckForNewAPKVersion(this);
+//        }
         SetServiceAlarmManager();
         navigationView.getMenu().getItem(0).setChecked(true);
         MainActivity.ACTIVITY_ACTIVE = true;

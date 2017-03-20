@@ -1,24 +1,12 @@
 package com.hotshotapp.ziku.hotshot.tables;
 
 import android.app.Notification;
-import android.app.NotificationManager;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.util.Log;
-
-import com.hotshotapp.ziku.hotshot.R;
 import com.hotshotapp.ziku.hotshot.jsonservices.KeyItems;
 import com.hotshotapp.ziku.hotshot.management.ImageAndFiles.ImageAndFilesManager;
-import com.hotshotapp.ziku.hotshot.management.SharedSettingsHS;
 import com.hotshotapp.ziku.hotshot.services.UniversalRefresh;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.URL;
 import java.util.Date;
 
 /**
@@ -142,7 +130,7 @@ public class HotShotsGSONConverter {
                 }
 
                 boolean haveImageDownloaded = imageAndFilesManager.checkIfHotShotHaveImageDownloaded(activeWebSite.webSiteName,String.valueOf(activeHotShot.getId()));
-                if(!haveImageDownloaded || forced) {
+                if(!haveImageDownloaded) {
                     imageAndFilesManager.downloadImageForNewHotShotAndSaveIt(activeWebSite.webSiteName, String.valueOf(activeHotShot.getId()),activeHotShot.imgUrl);
                 }
                 activeHotShot.save();

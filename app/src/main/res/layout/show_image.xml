@@ -129,7 +129,7 @@
                     android:paddingLeft="@dimen/small_padding"
                     android:paddingRight="@dimen/small_padding"
                     android:paddingTop="@dimen/small_padding"
-                    android:text="Idz do strony produktu"
+                    android:text="Idź do strony produktu"
                     android:textAlignment="center"
                     android:textColor="#F000"
                     android:textSize="@dimen/text_description_size" />

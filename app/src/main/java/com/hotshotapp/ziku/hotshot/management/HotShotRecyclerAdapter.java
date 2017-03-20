@@ -21,6 +21,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.signature.StringSignature;
 import com.hotshotapp.ziku.hotshot.R;
 import com.hotshotapp.ziku.hotshot.ShowImageActivity;
 import com.hotshotapp.ziku.hotshot.tables.ActiveHotShots;
@@ -60,7 +61,7 @@ public class HotShotRecyclerAdapter extends RecyclerView.Adapter<HotShotRecycler
 
     public void refrehstDataSet() {
         activeHotShotsList = ActiveHotShots.ReturnAllActiveHotShotsActive(itemTYpe);
-        if (activeHotShotsList.size() == 0 || activeHotShotsList == null) {
+        if (activeHotShotsList == null || activeHotShotsList.size() == 0) {
             setEmptyElementVisible(true);
         } else {
             setEmptyElementVisible(false);
@@ -120,7 +121,7 @@ public class HotShotRecyclerAdapter extends RecyclerView.Adapter<HotShotRecycler
         if (file.exists()) {
             if (file.length() > 0) {
                 Uri uri = Uri.fromFile(file);
-                Glide.with(context).load(uri).into(holder.imageView);
+                Glide.with(context).load(uri).signature(new StringSignature(activeHotShots.productName)).into(holder.imageView);
             } else {
                 Glide.with(context).load(R.drawable.hot_shot_icon).into(holder.imageView);
             }

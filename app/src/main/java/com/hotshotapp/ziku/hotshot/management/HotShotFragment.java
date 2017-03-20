@@ -30,8 +30,6 @@ public class HotShotFragment extends Fragment {
     public final static String CATEGORY_TYPE = "category_type";
 
     private HotShotRecyclerAdapter hotShotRecyclerAdapter;
-    private List<ActiveHotShots> activeHotShotsList;
-    private HotShotRecyclerAdapter.ActivityReactionOnAdapter activityReactionOnAdapter;
 
     @BindView(R.id.hot_shot_swipe_list)
     RecyclerView recyclerView;

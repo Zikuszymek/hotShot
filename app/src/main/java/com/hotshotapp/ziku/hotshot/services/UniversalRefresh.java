@@ -20,22 +20,17 @@ import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
-import android.widget.ListView;
 import android.widget.Toast;
 
 import com.hotshotapp.ziku.hotshot.BuildConfig;
 import com.hotshotapp.ziku.hotshot.MainActivity;
 import com.hotshotapp.ziku.hotshot.R;
 import com.hotshotapp.ziku.hotshot.jsonservices.AsyncTaskHotShot;
-import com.hotshotapp.ziku.hotshot.management.HotShotsActiveAdapter;
 import com.hotshotapp.ziku.hotshot.management.SharedSettingsHS;
 import com.hotshotapp.ziku.hotshot.jsonservices.RESTRequestAndCallback;
 import com.hotshotapp.ziku.hotshot.jsonservices.RetrofitRequestHotshot;
-import com.hotshotapp.ziku.hotshot.tables.ActiveHotShots;
 import com.hotshotapp.ziku.hotshot.tables.ActiveInfo;
 
-import java.util.Date;
-import java.util.List;
 
 /**
  * Created by Ziku on 2016-11-27.
@@ -181,10 +176,6 @@ public class UniversalRefresh {
         notificationManager.cancelAll();
     }
 
-    public static void ShowToasWithMessage(Context context, String message) {
-        Toast toast = Toast.makeText(context, message, Toast.LENGTH_LONG);
-        toast.show();
-    }
 
     public static void CheckForNewAPKVersion(Context context) {
 //        int currentVersion;

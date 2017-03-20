@@ -94,7 +94,7 @@ public class ActiveHotShots extends Model implements Comparable<ActiveHotShots>,
                 }
                 else {
                     ActiveCategories activeCategories = ActiveCategories.load(ActiveCategories.class, category);
-                    if(activeCategories.categoryType == active.webSites.activeCategory.categoryType)
+                    if(activeCategories!= null && activeCategories.categoryType.equals(active.webSites.activeCategory.categoryType))
                         returnList.add(active);
                 }
             }

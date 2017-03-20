@@ -15,6 +15,7 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.signature.StringSignature;
 import com.hotshotapp.ziku.hotshot.tables.ActiveHotShots;
 
 import java.io.File;
@@ -30,6 +31,8 @@ public class ShowImageActivity extends AppCompatActivity {
     public static final String DATA_FOR_DETAILS = "data_for_details";
     public static final String IMG_URL = "img_url";
     public static final String TRANSITION_ID = "transition_id";
+    public static final String DETAIL_SIGNATURE = "detail_signature";
+    public static final String LIST_SIGNATURE = "list_signature";
 
     @BindView(R.id.show_image_view)
     ImageView imageView;
@@ -88,7 +91,7 @@ public class ShowImageActivity extends AppCompatActivity {
         final File file = getFileStreamPath(fileName);
         if (file.exists()) {
             Uri uri = Uri.fromFile(file);
-            Glide.with(this).load(uri).into(imageView);
+            Glide.with(this).load(uri).signature(new StringSignature(activeHotShots.productName+DETAIL_SIGNATURE)).into(imageView);
         }
 
         productName.setText(activeHotShots.productName);
@@ -119,9 +122,7 @@ public class ShowImageActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent openUrlIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(activeHotShots.productUrl));
-                Intent chooser = Intent.createChooser(openUrlIntent, "Wybierz przeglądarkę");
-                chooser.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                startActivity(chooser);
+                startActivity(openUrlIntent);
             }
         });
 
